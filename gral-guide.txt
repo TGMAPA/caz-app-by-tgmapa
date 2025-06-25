@@ -1,0 +1,8 @@
+Install client:
+    tailwind
+    vite
+    router-react-dom
+
+Install server:
+    express
+    nodemon
