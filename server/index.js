@@ -4,8 +4,9 @@ import express from 'express';
 // Env Variables
 import {PORT} from './env_vars.js';
 
-// Models
-import getUsers from './db/MySQL/models/UserModel/User.js';
+// Routes
+import usersRoutes from './routes/users.routes.js';
+
 
 
 // Server instance
@@ -24,9 +25,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/getusers', (req, res) => {
-    res.send(
-        getUsers()
-    )
+    
 })
 
 app.post('/login', (req, res) => {
