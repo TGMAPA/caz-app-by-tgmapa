@@ -4,6 +4,9 @@ import express from 'express';
 // Env Variables
 import {PORT} from './env_vars.js';
 
+// Models
+import getUsers from './db/MySQL/models/UserModel/User.js';
+
 
 // Server instance
 const app = express();
@@ -17,6 +20,12 @@ app.get('/', (req, res) => {
         {
             message: 'HolaMundo'
         }
+    )
+})
+
+app.get('/getusers', (req, res) => {
+    res.send(
+        getUsers()
     )
 })
 

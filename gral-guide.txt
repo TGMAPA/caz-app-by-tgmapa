@@ -6,3 +6,4 @@ Install client:
 Install server:
     express
     nodemon
+    npm install --save mysql2
