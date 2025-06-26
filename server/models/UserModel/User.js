@@ -12,35 +12,83 @@ export default class User extends Model{
     
     // Method for Inserting new elements
     static async insert(data){
-        const query = `INSERT INTO ${this.table} (name, position) VALUES( ? , ? )`; // Query with missing Values
-        const values = [data.name, data.position]; // Values to insert
-        const result = await this.db.query(query, values);
-        return result;
+        const query = `INSERT INTO ${this.table} (name, position, phoneNum, personalEmail, address) VALUES( ? , ? , ? , ? , ?);`; // Query with missing Values
+        const values = [ // Values to insert
+            data.name, 
+            data.position, 
+            data.phoneNum, 
+            data.personalEmail, 
+            data.address
+        ]; 
+
+        try{
+            const query_exec = await this.db.query(query, values);
+            if(query_exec.status){ // Query succesfully executed
+                return true; // Return True status
+            }else{ return false } // Query Not succesfully executed: Error
+        } catch(error) { return false } // Return false status: ERROR
     }
 
     // Method for geting all elements
     static async getAll(){
-        const query = 'SELECT * FROM ' + this.table;
-        const result = await this.db.query(query)
-        return result;
+        const query = 'SELECT * FROM ' + this.table + ';';
+        try{
+            const query_exec = await this.db.query(query)
+            if(query_exec.status){ // Query succesfully executed
+                return [true, query_exec.result]; // Return True status
+            }else{ return [false, null] } // Query Not succesfully executed: Error
+        } catch(error) { return [false, null] } // Return false status: ERROR
+    }
+
+    static async getByID(id){
+        const query = `SELECT * FROM ${this.table} WHERE id = ${id};`;
+        try{
+            const query_exec = await this.db.query(query)
+            if(query_exec.status){ // Query succesfully executed
+                return [true, query_exec.result]; // Return True status
+            }else{ return [false, null] } // Query Not succesfully executed: Error
+        } catch(error) { return [false, null] } // Return false status: ERROR
     }
 
     // Method for updating elements
     static async update(id, data){
-        const sql = `UPDATE ${this.table} SET name = ?, position = ? WHERE id = ?`;
-        const values = [data.name, data.position, id];
-        const result = await this.db.query(sql, values);
-        console.log(result);
-        return result;
+        const sql = `UPDATE ${this.table} SET name = ?, position = ?, phoneNum = ?, personalEmail = ?, address = ? WHERE id = ?`;
+        const values = [ // Values to update
+            data.name, 
+            data.position, 
+            data.phoneNum, 
+            data.personalEmail, 
+            data.address, 
+            id
+        ];
+
+        try{
+            const query_exec = await this.db.query(sql, values);
+            if(query_exec.status){ // Query succesfully executed
+                return true; // Return True status
+            }else{ return false } // Query Not succesfully executed: Error
+        } catch(error) { return false } // Return false status: ERROR
     }
 
     // Method for deleting elements
     static async logicDelete(id){
-
+        const sql = `UPDATE ${this.table} SET LogDelete = NOW() WHERE id = ${id};`;
+        try{
+            const query_exec = await this.db.query(sql);
+            if(query_exec.status){ // Query succesfully executed
+                return true; // Return True status
+            }else{ return false } // Query Not succesfully executed: Error
+        } catch(error) { return false } // Return false status: ERROR
     }
 
     // Method for deleting elements in a logical way
-    async physicalDelete(id){
-
+    static async physicalDelete(id){
+        const sql = `DELETE FROM ${this.table} WHERE id = ${id};`;
+        try{
+            const query_exec = await this.db.query(sql);
+            if(query_exec.status){ // Query succesfully executed
+                return true; // Return True status
+            }else{ return false } // Query Not succesfully executed: Error
+        } catch(error) { return false } // Return false status: ERROR
     } 
 }

@@ -7,6 +7,9 @@ export default class Model {
     // Method for geting all elements
     async getAll(){}
 
+    // Method for geting one element by its ID
+    static async getByID(id){}
+
     // Method for updating elements
     async update(id, data){}
 

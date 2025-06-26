@@ -13,7 +13,7 @@ const config = {
 
 // Class for MysqlConnection Handling 
 export class MysqlConnection{
-    
+    // Constructor Method
     constructor(){
         this.config = config; // Config json
         this.mysqlConnection = null; // Object to locate mysql connection
@@ -44,9 +44,16 @@ export class MysqlConnection{
             try{
                 const [rows, fields] = await this.mysqlConnection.execute(query, values); // Execute SQL query
                 await this.end();
-                return rows; // Return result
+                return {
+                            status: true,
+                            result: rows
+                        }; // Return result
             } catch (error){
-                console.error( "Mysql Query Execution Error: ", error);
+                // console.error( "Mysql Query Execution Error: ", error);
+                return {
+                            status: false,
+                            result: null
+                        }; // Return result
             }
         }
         await this.end(); // Delete connection 

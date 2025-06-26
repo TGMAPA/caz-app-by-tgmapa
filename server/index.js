@@ -13,7 +13,7 @@ import usersRoutes from './routes/users.routes.js';
 const app = express();
 
 // Json proccessing in requests
-app.use(express.json())
+app.use(express.json());
 
 const API_DOMAIN_ROOT = "/api";
 

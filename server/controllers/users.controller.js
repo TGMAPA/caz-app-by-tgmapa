@@ -8,30 +8,59 @@ import User from "../models/UserModel/User.js" ;
 export const createUser = async (req, res) => {
     try {
         const data = req.body;
-        const id = await User.insert(data);
-        res.json(
-            { 
-                id, 
-                mensaje: 'Usuario creado exitosamente'
-            }
-        );
+        const status = await User.insert(data);
+        if(status){ // If status = true: Insertion Successfull
+            res.json(
+                { 
+                    status: status, 
+                    message: 'Usuario creado exitosamente'
+                }
+            );
+        }else{ // Insertion Not Successfull
+            res.status(500).json({ error: "Hubo un problema al crear el usuario." });
+        }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        // Return error without the precise message  
+        res.status(500).json({ error: "Hubo un problema al crear el usuario." });
     }
 };
 
 // Function to get all the users in db and error handling
 export const getAllUsers = async (req, res) => {
     try {
-        const usuarios = await User.getAll();
-        res.json(
-            { 
-                usuarios, 
-                mensaje: 'Se obtuvieron los usuarios exitosamente.' 
-            }
-        );
+        const [status, users] = await User.getAll();
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    users: users, 
+                    message: 'Se obtuvieron los usuarios exitosamente.' 
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al obtener a los usuario." });
+        }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: "Hubo un problema al obtener a los usuario." });
+    }
+};
+
+// Function to get all the users in db and error handling
+export const getUserByID = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const [status, user] = await User.getByID(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    user: user, 
+                    message: 'Se obtuvo el usuario exitosamente.' 
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al obtener al usuario." });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al obtener al usuario." });
     }
 };
 
@@ -40,13 +69,58 @@ export const updateUser = async (req, res) => {
     try {
         const data = req.body.data;
         const id2Search = req.body.id; // Id to update
-        const result = await User.update(id2Search, data);
-        res.json(
-            { 
-                mensaje: 'Usuario actualizado exitosamente'
-            }
-        );
+        const status = await User.update(id2Search, data);
+        if(status){ // Operation Succesfull
+            res.json(
+                {
+                    status: status,
+                    message: 'Usuario actualizado exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al actualizar el usuario." });
+        }
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: "Hubo un problema al actualizar el usuario." });
+    }
+};
+
+// Function to Logic Delete a User and error handling
+export const logicDelete = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const status = await User.logicDelete(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    status: status,
+                    message: 'Usuario eliminado exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al eliminar el usuario." });
+        }  
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al eliminar el usuario." });
+    }
+};
+
+// Function to Logic Delete a User and error handling
+export const physicalDelete = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const status = await User.physicalDelete(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    status: status,
+                    message: 'Usuario eliminado exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al eliminar el usuario." });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al eliminar el usuario." });
     }
 };

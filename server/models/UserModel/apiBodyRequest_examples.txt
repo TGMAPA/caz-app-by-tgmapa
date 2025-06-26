@@ -1,0 +1,37 @@
+
+/* Create Users */ http://localhost:3000/api/user/createUser
+{
+    "name": "Jose Manuel Pérez",
+    "position": "Cargador",
+    "phoneNum": "72324937072",
+    "personalEmail": "joseperez@gmail.com",
+    "address": "Camino Viejo a Cacalomacan #307"
+}
+
+/* Update Users */ http://localhost:3000/api/user/updateUser
+{
+    "data": {
+        "name": "Santiago Pérez",
+        "position": "Employee",
+        "phoneNum": "7227935036",
+        "personalEmail": "santiago@gmail.com",
+        "address": "Camino Viejo a Sanbuenaventura #307"
+    },
+    "id": 2
+}
+
+/* Get user by id */ http://localhost:3000/api/user/getUserByID
+{
+    "id": 2
+}
+
+/* Logic Delete user */ http://localhost:3000/api/user/userLogicalDelete
+{
+    "id": 2
+}
+
+/* Physical Delete user */ http://localhost:3000/api/user/userPhysicalDelete
+{
+    "id": 2
+}
+
