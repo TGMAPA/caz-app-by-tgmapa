@@ -12,6 +12,10 @@ import usersRoutes from './routes/users.routes.js';
 // Server instance
 const app = express();
 
+// Json proccessing in requests
+app.use(express.json())
+
+const API_DOMAIN_ROOT = "/api";
 
 // ======== API Endpoints ======== /
 
@@ -24,21 +28,8 @@ app.get('/', (req, res) => {
     )
 })
 
-app.get('/getusers', (req, res) => {
-    
-})
 
-app.post('/login', (req, res) => {
-
-})
-
-app.post('/logout', (req, res) => {
-    
-})
-
-app.post('/signin', (req, res) => {
-    
-})
+app.use(API_DOMAIN_ROOT + '/user', usersRoutes); // Users Routes
 
 // ======== API Endpoints ======== \
 

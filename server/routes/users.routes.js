@@ -1,10 +1,13 @@
 import express from 'express';
-//import { crearUsuario, obtenerUsuarioPorId } from '../controllers/users.controller.js';
+import { getAllUsers} from '../controllers/users.controller.js';
 
 const router = express.Router();
 
 // Crear usuario
 //router.post('/createUser', crearUsuario);
+
+// Get all users
+router.get('/getAllUsers', getAllUsers);
 
 // Obtener usuario por ID
 //router.get('/:id', obtenerUsuarioPorId);

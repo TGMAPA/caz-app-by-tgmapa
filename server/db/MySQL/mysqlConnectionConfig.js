@@ -23,8 +23,10 @@ export class MysqlConnection{
     async connect(){
         try{
             this.mysqlConnection = await mysql.createConnection(this.config);
+            return true;
         } catch (error){
             console.error( "Mysql Start Connection Error: ", error);
+            return false;
         }
     }
 
@@ -38,15 +40,14 @@ export class MysqlConnection{
     }
 
     async query( query ){
-        await this.connect(); // Start connection
-
-        try{
-            const [rows, fields] = await this.mysqlConnection.execute(query); // Execute SQL query
-            return rows; // Return result
-        } catch (error){
-            console.error( "Mysql Query Execution Error: ", error);
+        if( await this.connect() ){
+            try{
+                const [rows, fields] = await this.mysqlConnection.execute(query); // Execute SQL query
+                return rows; // Return result
+            } catch (error){
+                console.error( "Mysql Query Execution Error: ", error);
+            }
         }
-
-        await this.end(); // Delete connection
+        await this.end(); // Delete connection 
     }
 }
