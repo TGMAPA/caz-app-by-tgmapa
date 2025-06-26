@@ -5,11 +5,14 @@ export default class Model {
     async insert(data){}
 
     // Method for geting all elements
-    async getAll(data){}
+    async getAll(){}
 
     // Method for updating elements
-    async update(data){}
+    async update(id, data){}
 
-    // Method for deleting elements
-    async delete(id){} 
+    // Method for deleting elements in a logical way
+    async logicDelete(id){} 
+
+    // Method for deleting elements in a logical way
+    async physicalDelete(id){} 
 }

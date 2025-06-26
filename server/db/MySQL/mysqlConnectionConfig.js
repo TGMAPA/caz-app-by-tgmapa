@@ -39,10 +39,11 @@ export class MysqlConnection{
         }
     }
 
-    async query( query ){
+    async query( query , values= []){
         if( await this.connect() ){
             try{
-                const [rows, fields] = await this.mysqlConnection.execute(query); // Execute SQL query
+                const [rows, fields] = await this.mysqlConnection.execute(query, values); // Execute SQL query
+                await this.end();
                 return rows; // Return result
             } catch (error){
                 console.error( "Mysql Query Execution Error: ", error);
