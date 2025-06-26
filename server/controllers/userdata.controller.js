@@ -1,5 +1,5 @@
 // User Model
-import User from "../models/UserModel/User.js" ;
+import UserData from "../models/UserDataModel/UserData.js" ;
 
 
 // ===== Controller Functions
@@ -8,7 +8,7 @@ import User from "../models/UserModel/User.js" ;
 export const createUser = async (req, res) => {
     try {
         const data = req.body;
-        const status = await User.insert(data);
+        const status = await UserData.insert(data);
         if(status){ // If status = true: Insertion Successfull
             res.json(
                 { 
@@ -28,7 +28,7 @@ export const createUser = async (req, res) => {
 // Function to get all the users in db and error handling
 export const getAllUsers = async (req, res) => {
     try {
-        const [status, users] = await User.getAll();
+        const [status, users] = await UserData.getAll();
         if(status){ // Operation Succesfull
             res.json(
                 { 
@@ -48,7 +48,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserByID = async (req, res) => {
     try {
         const id = req.body.id;
-        const [status, user] = await User.getByID(id);
+        const [status, user] = await UserData.getByID(id);
         if(status){ // Operation Succesfull
             res.json(
                 { 
@@ -69,7 +69,7 @@ export const updateUser = async (req, res) => {
     try {
         const data = req.body.data;
         const id2Search = req.body.id; // Id to update
-        const status = await User.update(id2Search, data);
+        const status = await UserData.update(id2Search, data);
         if(status){ // Operation Succesfull
             res.json(
                 {
@@ -89,7 +89,7 @@ export const updateUser = async (req, res) => {
 export const logicDelete = async (req, res) => {
     try {
         const id = req.body.id;
-        const status = await User.logicDelete(id);
+        const status = await UserData.logicDelete(id);
         if(status){ // Operation Succesfull
             res.json(
                 { 
@@ -109,7 +109,7 @@ export const logicDelete = async (req, res) => {
 export const physicalDelete = async (req, res) => {
     try {
         const id = req.body.id;
-        const status = await User.physicalDelete(id);
+        const status = await UserData.physicalDelete(id);
         if(status){ // Operation Succesfull
             res.json(
                 { 

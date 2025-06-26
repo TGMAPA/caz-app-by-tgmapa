@@ -7,3 +7,4 @@ Install server:
     express
     nodemon
     npm install --save mysql2
+    npm install bcrypt

@@ -1,5 +1,5 @@
 
-/* Create Users */ http://localhost:3000/api/user/createUser
+/* Create Users */ http://localhost:3000/api/SystemUsers/createUser
 {
     "name": "Jose Manuel Pérez",
     "position": "Cargador",
@@ -8,7 +8,7 @@
     "address": "Camino Viejo a Cacalomacan #307"
 }
 
-/* Update Users */ http://localhost:3000/api/user/updateUser
+/* Update Users */ http://localhost:3000/api/SystemUsers/updateUser
 {
     "data": {
         "name": "Santiago Pérez",
@@ -20,18 +20,17 @@
     "id": 2
 }
 
-/* Get user by id */ http://localhost:3000/api/user/getUserByID
+/* Get user by id */ http://localhost:3000/api/SystemUsers/getUserByID
 {
     "id": 2
 }
 
-/* Logic Delete user */ http://localhost:3000/api/user/userLogicalDelete
+/* Logic Delete user */ http://localhost:3000/api/SystemUsers/userLogicalDelete
 {
     "id": 2
 }
 
-/* Physical Delete user */ http://localhost:3000/api/user/userPhysicalDelete
+/* Physical Delete user */ http://localhost:3000/api/SystemUsers/userPhysicalDelete
 {
     "id": 2
 }
-

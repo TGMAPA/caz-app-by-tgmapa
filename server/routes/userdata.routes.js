@@ -1,8 +1,14 @@
+// Modules
 import express from 'express';
-import { getAllUsers, createUser, updateUser, getUserByID, logicDelete, physicalDelete} from '../controllers/users.controller.js';
 
+// Controller Functions
+import { getAllUsers, createUser, updateUser, getUserByID, logicDelete, physicalDelete} from '../controllers/userdata.controller.js';
+
+
+// -- Router Instance for routes handling
 const router = express.Router();
 
+// =============== User Data Routes
 // Create User
 router.post('/createUser', createUser);
 

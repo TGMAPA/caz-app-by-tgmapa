@@ -6,9 +6,9 @@ import Model from '../Model.js';
 
 
 // User DB Model
-export default class User extends Model{
+export default class UserData extends Model{
     static db = new MysqlConnection();
-    static table = "users";
+    static table = "userdata";
     
     // Method for Inserting new elements
     static async insert(data){

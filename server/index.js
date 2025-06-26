@@ -5,7 +5,8 @@ import express from 'express';
 import {PORT} from './env_vars.js';
 
 // Routes
-import usersRoutes from './routes/users.routes.js';
+import userDataRoutes from './routes/userdata.routes.js';
+import systemUserRoutes from './routes/systemuser.routes.js';
 
 
 
@@ -28,8 +29,11 @@ app.get('/', (req, res) => {
     )
 })
 
+// UserData Routes
+app.use(API_DOMAIN_ROOT + '/UserData', userDataRoutes); 
 
-app.use(API_DOMAIN_ROOT + '/user', usersRoutes); // Users Routes
+// SystemUsers Routes
+app.use(API_DOMAIN_ROOT + '/SystemUsers', systemUserRoutes); 
 
 // ======== API Endpoints ======== \
 
