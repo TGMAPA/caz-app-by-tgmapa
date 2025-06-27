@@ -2,11 +2,12 @@
 import express from 'express';
 
 // Env Variables
-import {PORT} from './env_vars.js';
+import { PORT } from './env_vars.js';
 
 // Routes
 import userDataRoutes from './routes/userdata.routes.js';
 import systemUserRoutes from './routes/systemuser.routes.js';
+import authRoutes from './routes/auth.routes.js';
 
 
 
@@ -34,6 +35,9 @@ app.use(API_DOMAIN_ROOT + '/UserData', userDataRoutes);
 
 // SystemUsers Routes
 app.use(API_DOMAIN_ROOT + '/SystemUsers', systemUserRoutes); 
+
+// SystemUsers Routes
+app.use(API_DOMAIN_ROOT + '/Auth', authRoutes); 
 
 // ======== API Endpoints ======== \
 

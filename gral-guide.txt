@@ -8,3 +8,4 @@ Install server:
     nodemon
     npm install --save mysql2
     npm install bcrypt
+    npm install crypto
