@@ -61,6 +61,14 @@ export default function LoginPage(){
           <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             Ingresar
           </button>
+
+          {/* Error Label */}
+          <div className="flex items-start gap-2 bg-red-50 border-l-4 border-red-600 text-red-700 p-3 rounded-md shadow-sm animate-fade-in">
+            <span className="text-sm font-medium ">
+              Contraseña incorrecta. Intenta nuevamente.
+            </span>
+          </div>
+          
         </div>
       </main>
 
