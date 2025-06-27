@@ -49,7 +49,7 @@ export class MysqlConnection{
                             result: rows
                         }; // Return result
             } catch (error){
-                // console.error( "Mysql Query Execution Error: ", error);
+                //console.error( "Mysql Query Execution Error: ", error);
                 return {
                             status: false,
                             result: null

@@ -24,7 +24,7 @@ export default class SystemUser extends Model{
             if(query_exec.status){ // Query succesfully executed
                 return true; // Return True status
             }else{ return false } // Query Not succesfully executed: Error
-        } catch(error) { return false } // Return false status: ERROR
+        } catch(error) { return false;  } // Return false status: ERROR
     }
 
     // Method for updating elements
@@ -66,6 +66,17 @@ export default class SystemUser extends Model{
         } catch(error) { return [false, null] } // Return false status: ERROR
     }
 
+    static async getBy(fields = {}){
+        let query = `SELECT * FROM ${this.table} WHERE`;
+        query = buildWHEREQuerywithDict(query, fields, "AND"); // Build Query with dynamic fields
+        try{
+            const query_exec = await this.db.query(query)
+            if(query_exec.status){ // Query succesfully executed
+                return [true, query_exec.result]; // Return True status
+            }else{ return [false, null] } // Query Not succesfully executed: Error
+        } catch(error) { return [false, null] } // Return false status: ERROR
+    }
+
     // Method for deleting elements in a logical way
     static async logicDelete(id){
         const sql = `UPDATE ${this.table} SET LogDelete = NOW() WHERE id = ${id};`;
@@ -87,4 +98,38 @@ export default class SystemUser extends Model{
             }else{ return false } // Query Not succesfully executed: Error
         } catch(error) { return false } // Return false status: ERROR
     } 
+}
+
+// Method to build a filter WHERE with multiple fields and values
+function buildWHEREQuerywithDict(base_query, fields, logicalOperator){
+    let aux_query_fields = "";
+    let counter = 0;
+    for (const table_field in fields) { // Dynamic query build per field
+        const value = fields[table_field];
+        
+        switch(typeof(value)){  // Match fields with its values datatype
+            case "string":
+                // String Variable
+                aux_query_fields+= ` ${table_field} = '${value}'`;
+                break;
+            
+            case "number":
+                // Number Variable
+                aux_query_fields+= ` ${table_field} = ${value}`;
+                break;
+
+            default:
+                aux_query_fields+= ` ${table_field} = ${value}`;
+                break
+        }
+        
+        if(Object.keys(fields).length > 1 && counter < Object.keys(fields).length-1){
+            aux_query_fields+= " " + logicalOperator;
+        }
+        counter++;
+    }
+    aux_query_fields+= ";"
+    base_query+= aux_query_fields;
+
+    return base_query; // Return query
 }
