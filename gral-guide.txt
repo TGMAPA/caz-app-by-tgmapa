@@ -2,6 +2,8 @@ Install client:
     tailwind
     vite
     router-react-dom
+    npm install axios
+    npm install cors
 
 Install server:
     express
@@ -9,3 +11,9 @@ Install server:
     npm install --save mysql2
     npm install bcrypt
     npm install crypto
+    npm install jsonwebtoken
+    npm install cookie-parser
+    npm install dotenv
+
+Pendientes: 
+- Falta refresacar cookie

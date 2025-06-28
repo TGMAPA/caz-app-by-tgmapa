@@ -3,3 +3,5 @@
     "username": "manano03",
     "password": "123456"
 }
+
+/* Kill user session */  http://localhost:3000/api/Auth/KillAuthUser
