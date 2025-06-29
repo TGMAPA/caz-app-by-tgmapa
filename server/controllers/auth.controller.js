@@ -64,7 +64,7 @@ export const authUser = async (req, res) => {
                 const validUser = result[0]; // SystemData Info
                 
                 const isValid = await bcrypt.compare(data.password, validUser.password);
-                console.log("Login successfull: ", isValid);
+                console.log("Login successfull : ", isValid);
                 
                 if(isValid){
                     // ---- Valid Auth User
@@ -144,7 +144,7 @@ export const authUser = async (req, res) => {
 
 // Function to logout and kill session
 export const KillAuthUser = async (req, res) => {
-    console.log("La sesión se cerró exitosamente. Usuario: ", req.session.currentUser);
+    console.log("La sesión se cerró exitosamente. Usuario.");
     res
         .clearCookie('access_token')  // Clean Access Cookie
         .clearCookie('refresh_token') // Clean Refresh Cookie

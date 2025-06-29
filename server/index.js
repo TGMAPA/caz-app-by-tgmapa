@@ -20,6 +20,9 @@ import Validation from './tools/Validation.js';
 // Server instance
 const app = express();
 
+// Trust in Nginx
+app.set('trust proxy', true);
+
 // Json proccessing in requests
 app.use(express.json());
 
@@ -48,13 +51,17 @@ app.use((req, res, next) => {
         API_DOMAIN_ROOT + "/Auth/refreshUserToken"
     ];
 
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
     const access_token = req.cookies.access_token;  // Access to token inside Cookie
     const refresh_token = req.cookies.refresh_token;  // Access to token inside Cookie
 
     req.session = { currentUser: null }; // Initialize data session to null  req.session is accesible from any route
     req.refreshSession = { currentUser: null } // Initialize data Refresh session to null  req.refreshSession is accesible from any route
 
+    console.log("\n");
     console.log("Server Request to :'",req.path,"'");
+    console.log("Requestor IP      : ",ip);
 
     try{
         const refreshData = jwt.verify(refresh_token, SECRET_JWT_KEY);   // Verify Refresh Token
