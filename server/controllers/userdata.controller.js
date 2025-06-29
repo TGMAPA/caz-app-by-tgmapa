@@ -6,6 +6,7 @@ import UserData from "../models/UserDataModel/UserData.js" ;
 
 // Function to create a User and error handling
 export const createUser = async (req, res) => {
+    
     try {
         const data = req.body;
         const status = await UserData.insert(data);
@@ -18,6 +19,7 @@ export const createUser = async (req, res) => {
             );
         }else{ // Insertion Not Successfull
             res.status(500).json({ error: "Hubo un problema al crear el usuario." });
+            
         }
     } catch (error) {
         // Return error without the precise message  

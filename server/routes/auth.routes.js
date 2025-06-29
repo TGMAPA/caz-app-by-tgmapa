@@ -2,7 +2,7 @@
 import express from 'express';
 
 // Controller Functions
-import { authUser, KillAuthUser} from '../controllers/auth.controller.js';
+import { authUser, KillAuthUser, refreshUserToken } from '../controllers/auth.controller.js';
 
 
 // -- Router Instance for routes handling
@@ -14,6 +14,9 @@ router.post('/authUser', authUser);
 
 // Kill Auth System User
 router.post('/KillAuthUser', KillAuthUser);
+
+// Refresh User Token
+router.post('/refreshUserToken', refreshUserToken);
 
 
 export default router;

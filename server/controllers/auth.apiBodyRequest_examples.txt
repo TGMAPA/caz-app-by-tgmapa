@@ -5,3 +5,5 @@
 }
 
 /* Kill user session */  http://localhost:3000/api/Auth/KillAuthUser
+
+/* Refresh User Token */  http://localhost:3000/api/Auth/refreshUserToken

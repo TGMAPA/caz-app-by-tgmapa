@@ -32,12 +32,12 @@ export default function LoginPage(){
       const response = await axios.post(
         DOMAIN_URL_SERVER + "/Auth/authUser", 
         {
-            username: username,
-            password: password
+          username: username,
+          password: password
         }, 
         { withCredentials: true }
       );
-
+      
       setError(""); // Clean error label
 
       // ----------- Redirect By User Position:

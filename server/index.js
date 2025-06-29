@@ -42,16 +42,35 @@ const API_DOMAIN_ROOT = "/api";
 // ======== API Endpoints ======== /
 
 app.use((req, res, next) => {
-    const token = req.cookies.access_token;  // Access to token inside Cookie
+    // Public Routes
+    const publicPaths = [
+        API_DOMAIN_ROOT + "/Auth/authUser",
+        API_DOMAIN_ROOT + "/Auth/refreshUserToken"
+    ];
+
+    const access_token = req.cookies.access_token;  // Access to token inside Cookie
+    const refresh_token = req.cookies.refresh_token;  // Access to token inside Cookie
 
     req.session = { currentUser: null }; // Initialize data session to null  req.session is accesible from any route
-    
+    req.refreshSession = { currentUser: null } // Initialize data Refresh session to null  req.refreshSession is accesible from any route
+
+    console.log("Server Request to :'",req.path,"'");
+
     try{
-        let data = null;
-        data = jwt.verify(token, SECRET_JWT_KEY);
-        req.session.currentUser = data; // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position)
-        console.log("Current User: ", req.session.currentUser);
-    } catch {}
+        const refreshData = jwt.verify(refresh_token, SECRET_JWT_KEY);   // Verify Refresh Token
+        req.refreshSession.currentUser = refreshData;          // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
+        const data = jwt.verify(access_token, SECRET_JWT_KEY);   // Verify Access Token
+        req.session.currentUser = data;             // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
+        console.log("- From Current User: ", req.session.currentUser);
+    } catch {
+        // If current Path is Public, let the middleware go on
+        if (publicPaths.includes(req.path)) {
+            return next();
+        }
+        console.error("- From Current User: Usuario no Autorizado")
+        res.status(401).json({ error: "Usuario No Autorizado." });
+        return;
+    }
     next(); // Go on to the next route or middleware
 })
 

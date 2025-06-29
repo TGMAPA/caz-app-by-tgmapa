@@ -17,9 +17,25 @@ export default function MainScreen(){
         {}, 
         { withCredentials: true }
       )
-      navigate("/");
+      navigate("/login");
     } catch (err) {}
   }
+
+  const createUser = async () => {
+    const response = await axios.post(
+      DOMAIN_URL_SERVER + "/UserData/createUser", 
+      {
+        "name": "Jose Manuel Pérez",
+        "position": "Cargador",
+        "phoneNum": "72324937072",
+        "personalEmail": "joseperez@gmail.com",
+        "address": "Camino Viejo a Cacalomacan #307"
+      }, 
+      { withCredentials: true }
+    )
+    console.log("Usuario creado exitosamente");
+
+  } 
 
   return (
       <div className="min-h-screen flex flex-col font-sans">
@@ -38,6 +54,12 @@ export default function MainScreen(){
               <button onClick={LogOut} type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Cerrar Sesión
               </button>
+
+              {/* TEST Botton */}
+              <button onClick={createUser} type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-800 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Crear Usuario
+              </button>
+
           </div>
         </main>
   
