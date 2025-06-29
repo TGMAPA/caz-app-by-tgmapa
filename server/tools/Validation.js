@@ -8,12 +8,12 @@ export default class Validation{
                 return true;
             }else{
                 // User Without priviledge
-                res.status(403).json({ message: "Acceso denegado" });
+                res.status(401).json({ message: "Acceso denegado" });
                 return false;
             }
         }else{
             // User without session
-            res.status(403).json({ message: "Acceso denegado" });
+            res.status(401).json({ message: "Acceso denegado" });
             return false;
         }
     }

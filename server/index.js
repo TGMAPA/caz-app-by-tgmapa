@@ -51,7 +51,7 @@ app.use((req, res, next) => {
         API_DOMAIN_ROOT + "/Auth/refreshUserToken"
     ];
 
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP
 
     const access_token = req.cookies.access_token;  // Access to token inside Cookie
     const refresh_token = req.cookies.refresh_token;  // Access to token inside Cookie
