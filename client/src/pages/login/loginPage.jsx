@@ -37,13 +37,13 @@ export default function LoginPage(){
         }, 
         { withCredentials: true }
       );
-      
-      setError(""); // Clean error label
 
+      setError("") // Clean error label
+  
       // ----------- Redirect By User Position:
       navigate("/dashboard");
 
-    } catch (err) {
+    } catch (error) {
       setError("Contraseña incorrecta. Intenta nuevamente.");
     }
   };

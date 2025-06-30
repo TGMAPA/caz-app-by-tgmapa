@@ -11,13 +11,16 @@ import {
 // Modules
 import bcrypt from 'bcrypt';  // Hashing passwords
 import jwt from 'jsonwebtoken'; // JWT tokens for sessions
+import cryto from 'crypto'; // Hashing refresh token for session
 
 // Models
 import SystemUser from "../models/SystemUserModel/SystemUser.js" ; // Ssytem User Model
 import UserData from '../models/UserDataModel/UserData.js';
+import SessionRefreshToken from '../models/session_refresh_tokens/SessionRefreshTokens.js'
 
 // Tools Functions
-import { minutes2milisec } from '../tools/tools.js';
+import { minutes2milisec, getMySQLDateTime } from '../tools/tools.js';
+import { error } from 'console';
 
 
 
@@ -37,6 +40,11 @@ function signJWT(data2Store, expirationTime){
                     expiresIn: expirationTime  
                 } // Token expiration time
             );
+}
+
+// Function to hash Refresh Token for Session
+async function hashToken(token) {
+  return await bcrypt.hash(token, 10);
 }
 
 // ===== Controller Functions
@@ -91,7 +99,27 @@ export const authUser = async (req, res) => {
                         
                         // ----  Create JWT For Session - Refresh Token
                         const refreshToken = signJWT(currentUser, REFRESH_TOKEN_SESSION_EXPIRATION_TIME_STR);
+
+                        // --- Create Session in DB table - Store Refresh Token
+                        const data = {
+                            systemUserID: currentUser.id, // SystemUser ID
+                            refresh_token_hash: await hashToken(refreshToken),  // hashed Refreshed token  
+                            created_at: getMySQLDateTime(), // NOW
+                            expires_at: getMySQLDateTime(new Date(Date.now() + minutes2milisec(REFRESH_TOKEN_SESSION_EXPIRATION_TIME_INT))), // Now + Refresh Token Expiration time
+                            user_agent: req.get('User-Agent'),  // Requestor's Aplication (Google, Mozila, etc)
+                            ip_address: req.headers['x-forwarded-for'] || req.socket.remoteAddress, // Requestor ip address
+                            revoked: 0  // Not revoked
+                        }
                         
+                        // Insert Session in DB
+                        const status = await SessionRefreshToken.insert(data);
+
+                        if(!status){
+                            // Operation Not Successfull
+                            res.status(500).json({ error: "Hubo un problema al autorizar al usuario." });
+                            return;
+                        }
+
                         // Server Complete Response
                         res
                             .cookie(  // Save in cookie session - AccessToken
@@ -138,6 +166,7 @@ export const authUser = async (req, res) => {
         }   
     } catch (error) {
         // Return error without the precise message  
+        console.log(error)
         res.status(500).json({ error: "Hubo un problema al autenticar el usuario." });
     }
 };
@@ -155,6 +184,34 @@ export const KillAuthUser = async (req, res) => {
 export const refreshUserToken = async (req, res) => {
     const refresh_token = req.cookies.refresh_token;
     if(!refresh_token) return res.status(401).json({ error: "Usuario No Autorizado." }); // Unauthorized error
+
+    // Verify if refresh_token isnt revoked, deleted or expired in bd: session_refresh_hash
+    // Flow:
+    /*
+        Usuario hace login → generas refresh_token y lo:
+
+            Envías como cookie (HttpOnly)
+
+            Guardas su hash en la tabla junto con user_id, expires_at
+
+        Usuario hace una petición con token expirado → se hace refresh:
+
+            Tomas la cookie
+
+            La hasheas
+
+            Buscas en la tabla si existe, no está revocado, y no ha expirado
+
+        Si es válido:
+
+            Generas nuevo access_token
+
+            Opcional: reemplazas o actualizas refresh_token
+
+        Si el usuario cierra sesión o cambia contraseña:
+
+            Eliminas o revocas todos los refresh tokens del usuario
+    */
 
     try{
         const data = jwt.verify(refresh_token, SECRET_JWT_KEY); // Verify Refresh Token

@@ -34,6 +34,7 @@ export default function MainScreen(){
       { withCredentials: true }
     )
     console.log("Usuario creado exitosamente");
+    
 
   } 
 

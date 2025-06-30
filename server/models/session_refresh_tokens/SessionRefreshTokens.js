@@ -9,17 +9,21 @@ import { buildWHEREQuerywithDict } from '../../tools/tools.js'
 
 
 // ----- System User DB Model
-export default class SystemUser extends Model{
+export default class SessionRefreshToken extends Model{
     static db = new MysqlConnection();
-    static table = "systemusers";
+    static table = "session_refresh_tokens";
     
     // Method for Inserting new elements
     static async insert(data){
-        const query = `INSERT INTO ${this.table} (userID, username, password) VALUES( ? , ? , ? );`; // Query with missing Values
+        const query = `INSERT INTO ${this.table} (systemUserID, refresh_token_hash, created_at, expires_at, user_agent, ip_address, revoked) VALUES( ?, ?, ?, ?, ?, ?, ? );`; // Query with missing Values
         const values = [ // Values to insert
-            data.userDataID, 
-            data.username, 
-            data.password
+            data.systemUserID, 
+            data.refresh_token_hash, 
+            data.created_at,
+            data.expires_at,
+            data.user_agent,
+            data.ip_address,
+            data.revoked
         ];
 
         try{
@@ -32,10 +36,15 @@ export default class SystemUser extends Model{
 
     // Method for updating elements
     static async update(id, data){
-        const sql = `UPDATE ${this.table} SET username = ?, password = ? WHERE id = ?`;
+        const sql = `UPDATE ${this.table} SET systemUserID = ?, refresh_token_hash = ?, created_at = ?, expires_at = ?, user_agent = ?, ip_address = ?, revoked = ?, WHERE id = ?`;
         const values = [ // Values to update
-            data.username, 
-            data.password,
+            data.systemUserID, 
+            data.refresh_token_hash, 
+            data.created_at,
+            data.expires_at,
+            data.user_agent,
+            data.ip_address,
+            data.revoked,
             id
         ];
 
@@ -102,3 +111,4 @@ export default class SystemUser extends Model{
         } catch(error) { return false } // Return false status: ERROR
     } 
 }
+
