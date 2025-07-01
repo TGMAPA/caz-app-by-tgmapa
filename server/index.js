@@ -74,7 +74,8 @@ app.use((req, res, next) => {
         if (publicPaths.includes(req.path)) {
             return next();
         }
-        console.error("- From Current User: Usuario no Autorizado")
+        
+        console.error("- From Current User: Usuario no Autorizado");
         res.status(401).json({ error: "Usuario No Autorizado." });
         return;
     }
