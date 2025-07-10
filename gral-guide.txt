@@ -17,3 +17,4 @@ Install server:
 
 Pendientes: 
 - Falta refresacar cookie - Completado
+- Falta implementar acceso dinamico a endpoints segun tablas !!
