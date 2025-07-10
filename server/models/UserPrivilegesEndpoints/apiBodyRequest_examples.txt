@@ -1,0 +1,14 @@
+// Create Relation Privilege - Endpoint
+Post http://localhost:3000/api/SystemUsers/relatePositionAndEndpoint
+{
+	"privilegeID": 1,
+    "endpoint": "/UserData/createUser"
+}
+
+
+// Delete Relation Privilege - Endpoint
+Post http://localhost:3000/api/SystemUsers/deleteRelationPrivilegeAndEndpoint
+{
+    "privilegeID": 1,
+    "endpoint": "/UserData/createUser"
+}
