@@ -8,11 +8,6 @@ import Validation from "../tools/Validation.js";
 
 // Function to create a User and error handling
 export const createUser = async (req, res) => {
-    /*
-    if(!await Validation.VerifyUserPrivilege( req.session.currentUser, [ 'Admin' ], res )){ 
-        return ;
-    } */ // Restrict Users by their position and session existence 
-     
     try {
         const data = req.body;
         const status = await UserData.insert(data);

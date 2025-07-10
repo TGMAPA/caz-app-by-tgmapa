@@ -50,7 +50,6 @@ app.use((req, res, next) => {
         API_DOMAIN_ROOT + "/Auth/refreshUserToken",
 
         // Test Public Routes
-        
     ];
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP
@@ -71,6 +70,13 @@ app.use((req, res, next) => {
         const data = jwt.verify(access_token, SECRET_JWT_KEY);   // Verify Access Token
         req.session.currentUser = data;             // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
         console.log("- From Current User: ", req.session.currentUser);
+
+        // Access Verification by its SystemUserPosition and PositionPrivileges
+        /*
+        if(!await Validation.VerifyUserPrivilege( req.session.currentUser, [ 'Admin' ], res )){ 
+            return ;
+        } */ // Restrict Users by their position and session existence 
+
     } catch {
         // If current Path is Public, let the middleware go on
         if (publicPaths.includes(req.path)) {
