@@ -16,4 +16,4 @@ Install server:
     npm install dotenv
 
 Pendientes: 
-- Falta refresacar cookie
+- Falta refresacar cookie - Completado

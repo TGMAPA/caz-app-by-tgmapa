@@ -8,9 +8,10 @@ import Validation from "../tools/Validation.js";
 
 // Function to create a User and error handling
 export const createUser = async (req, res) => {
+    /*
     if(!await Validation.VerifyUserPrivilege( req.session.currentUser, [ 'Admin' ], res )){ 
         return ;
-    } // Restrict Users by their position and session existence 
+    } */ // Restrict Users by their position and session existence 
      
     try {
         const data = req.body;
@@ -24,7 +25,6 @@ export const createUser = async (req, res) => {
             );
         }else{ // Insertion Not Successfull
             res.status(500).json({ error: "Hubo un problema al crear el usuario." });
-            
         }
     } catch (error) {
         // Return error without the precise message  

@@ -177,7 +177,7 @@ export const KillAuthUser = async (req, res) => {
         .clearCookie('refresh_token') // Clean Refresh Cookie
         .json({ message: 'La sesión se cerró exitosamente.'});
 
-    console.log("La sesión se cerró exitosamente. Usuario.");
+    console.log("La sesión se cerró exitosamente.");
 };
 
 // Function for Refreshing User Session Token 

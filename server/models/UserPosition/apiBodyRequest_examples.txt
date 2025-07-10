@@ -1,0 +1,7 @@
+// Create User Position
+POST http://localhost:3000/api/SystemUsers/createUserPosition
+{
+	"name": "Empleado-Cargador",
+    "description": "Empleado encargado de entregar el producto vendido al cliente."
+}
+

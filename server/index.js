@@ -41,14 +41,17 @@ const API_DOMAIN_ROOT = "/api";
 
 
 
-
 // ======== API Endpoints ======== /
 
 app.use((req, res, next) => {
     // Public Routes
     const publicPaths = [
         API_DOMAIN_ROOT + "/Auth/authUser",
-        API_DOMAIN_ROOT + "/Auth/refreshUserToken"
+        API_DOMAIN_ROOT + "/Auth/refreshUserToken",
+
+        // Test Public Routes
+        API_DOMAIN_ROOT + "/SystemUsers/createUserPrivilege",
+        API_DOMAIN_ROOT + "/SystemUsers/getAllUserPrivileges"
     ];
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP

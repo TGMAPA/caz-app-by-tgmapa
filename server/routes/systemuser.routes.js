@@ -1,8 +1,10 @@
 // Modules
 import express from 'express';
 
-// Controller Functions
+// System User Controller Functions
 import { createUser } from '../controllers/systemuser.controller.js';
+import { createUserPosition } from '../controllers/userPositions.controller.js';
+import { createUserPrivilege, getAllUsers } from '../controllers/userPrivilege.controller.js';
 
 
 // -- Router Instance for routes handling
@@ -12,20 +14,16 @@ const router = express.Router();
 // Create User
 router.post('/createUser', createUser);
 
-// Get all users
-// router.get('/getAllUsers', getAllUsers);
+// Create User Position
+router.post('/createUserPosition', createUserPosition);
 
-// Get user by ID
-// router.get('/getUserByID', getUserByID);
+// Create User Privilege
+router.post('/createUserPrivilege', createUserPrivilege);
 
-// Update user
-// router.post('/updateUser', updateUser);
+// Create User Position - Privilege
+router.post('/createUserPrivilege', createUserPrivilege);
 
-// Logical Delete user
-// router.post('/userLogicalDelete', logicDelete);
-
-// Physical Delete user
-// router.post('/userPhysicalDelete', physicalDelete);
-
+// Get All User Position - Privilege 
+router.post('/getAllUserPrivileges', getAllUsers);
 
 export default router;

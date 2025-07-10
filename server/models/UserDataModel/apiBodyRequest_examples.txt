@@ -1,21 +1,27 @@
 
 /* Create Users */ http://localhost:3000/api/UserData/createUser
 {
-    "name": "Jose Manuel Pérez",
-    "position": "Cargador",
-    "phoneNum": "72324937072",
-    "personalEmail": "joseperez@gmail.com",
+    "name": "Jose Manuel",
+    "lastname_1": "Pérez",
+    "lastname_2": "Rougon",
+    "position": 1,
+    "phoneNum": "7223159948",
+    "personalEmail": "mperez@hotmail.com",
     "address": "Camino Viejo a Cacalomacan #307"
 }
 
 /* Update Users */ http://localhost:3000/api/UserData/updateUser
 {
     "data": {
-        "name": "Santiago Pérez",
-        "position": "Employee",
-        "phoneNum": "7227935036",
-        "personalEmail": "santiago@gmail.com",
-        "address": "Camino Viejo a Sanbuenaventura #307"
+        {
+            "name": "Jose Manuel",
+            "lastname_1": "Pérez",
+            "lastname_2": "Rougon",
+            "position": 1,
+            "phoneNum": "7223159948",
+            "personalEmail": "mperez@hotmail.com",
+            "address": "Camino Viejo a Cacalomacan #307"
+        }
     },
     "id": 2
 }

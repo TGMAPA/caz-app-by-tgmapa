@@ -2,16 +2,15 @@
 import bcrypt from 'bcrypt';  // Hashing passwords
 
 // Function to hash Refresh Token for Session
-export async function hashToken(token) {
+export async function hashToken(token){
   return await bcrypt.hash(token, 10);
 }
-
 
 export function minutes2milisec(minutes){
     return 1000 * 60 * minutes;
 } 
 
-export function getMySQLDateTime(date = new Date()) {
+export function getMySQLDateTime(date = new Date()){
   const pad = n => n.toString().padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
          `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
