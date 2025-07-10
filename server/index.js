@@ -50,8 +50,8 @@ app.use((req, res, next) => {
         API_DOMAIN_ROOT + "/Auth/refreshUserToken",
 
         // Test Public Routes
-        API_DOMAIN_ROOT + "/SystemUsers/createUserPrivilege",
-        API_DOMAIN_ROOT + "/SystemUsers/getAllUserPrivileges"
+        API_DOMAIN_ROOT + "/UserData/getUserByID",
+        API_DOMAIN_ROOT + "/SystemUsers/relatePositionAndPrivilege"
     ];
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP

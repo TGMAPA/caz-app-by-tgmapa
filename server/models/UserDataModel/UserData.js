@@ -31,27 +31,6 @@ export default class UserData extends Model{
         } catch(error) { return false } // Return false status: ERROR
     }
 
-    // Method for geting all elements
-    static async getAll(){
-        const query = 'SELECT * FROM ' + this.table + ';';
-        try{
-            const query_exec = await this.db.query(query)
-            if(query_exec.status){ // Query succesfully executed
-                return [true, query_exec.result]; // Return True status
-            }else{ return [false, null] } // Query Not succesfully executed: Error
-        } catch(error) { return [false, null] } // Return false status: ERROR
-    }
-
-    static async getByID(id){
-        const query = `SELECT * FROM ${this.table} WHERE id = ${id};`;
-        try{
-            const query_exec = await this.db.query(query)
-            if(query_exec.status){ // Query succesfully executed
-                return [true, query_exec.result]; // Return True status
-            }else{ return [false, null] } // Query Not succesfully executed: Error
-        } catch(error) { return [false, null] } // Return false status: ERROR
-    }
-
     // Method for updating elements
     static async update(id, data){
         const sql = `UPDATE ${this.table} SET name = ?, lastname_1= ? , lastname_2= ? , position = ?, phoneNum = ?, personalEmail = ?, address = ? WHERE id = ?`;
@@ -73,26 +52,4 @@ export default class UserData extends Model{
             }else{ return false } // Query Not succesfully executed: Error
         } catch(error) { return false } // Return false status: ERROR
     }
-
-    // Method for deleting elements
-    static async logicDelete(id){
-        const sql = `UPDATE ${this.table} SET LogDelete = NOW() WHERE id = ${id};`;
-        try{
-            const query_exec = await this.db.query(sql);
-            if(query_exec.status){ // Query succesfully executed
-                return true; // Return True status
-            }else{ return false } // Query Not succesfully executed: Error
-        } catch(error) { return false } // Return false status: ERROR
-    }
-
-    // Method for deleting elements in a logical way
-    static async physicalDelete(id){
-        const sql = `DELETE FROM ${this.table} WHERE id = ${id};`;
-        try{
-            const query_exec = await this.db.query(sql);
-            if(query_exec.status){ // Query succesfully executed
-                return true; // Return True status
-            }else{ return false } // Query Not succesfully executed: Error
-        } catch(error) { return false } // Return false status: ERROR
-    } 
 }

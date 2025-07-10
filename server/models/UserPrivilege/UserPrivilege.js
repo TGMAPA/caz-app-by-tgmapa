@@ -4,9 +4,6 @@ import { MysqlConnection } from '../../db/MySQL/mysqlConnectionConfig.js';
 // Model Interface
 import Model from '../Model.js';
 
-// Tools
-import { buildWHEREQuerywithDict } from '../../tools/tools.js'
-
 
 // ----- User Privilege DB Model
 export default class UserPrivilege extends Model{

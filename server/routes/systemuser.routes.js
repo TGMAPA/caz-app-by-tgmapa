@@ -5,6 +5,7 @@ import express from 'express';
 import { createUser } from '../controllers/systemuser.controller.js';
 import { createUserPosition } from '../controllers/userPositions.controller.js';
 import { createUserPrivilege, getAllUsers } from '../controllers/userPrivilege.controller.js';
+import { relatePositionAndPrivilege } from '../controllers/userPositionsPrivileges.controller.js';
 
 
 // -- Router Instance for routes handling
@@ -21,7 +22,7 @@ router.post('/createUserPosition', createUserPosition);
 router.post('/createUserPrivilege', createUserPrivilege);
 
 // Create User Position - Privilege
-router.post('/createUserPrivilege', createUserPrivilege);
+router.post('/relatePositionAndPrivilege', relatePositionAndPrivilege);
 
 // Get All User Position - Privilege 
 router.post('/getAllUserPrivileges', getAllUsers);
