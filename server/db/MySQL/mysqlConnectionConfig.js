@@ -50,6 +50,7 @@ export class MysqlConnection{
                         }; // Return result
             } catch (error){
                 //console.error( "Mysql Query Execution Error: ", error);
+                await this.end();
                 return {
                             status: false,
                             result: null

@@ -12,8 +12,15 @@ import userDataRoutes from './routes/userdata.routes.js';
 import systemUserRoutes from './routes/systemuser.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
+// Controllers
+import { getPositionEndpoints } from './controllers/userPositionsEndpoints.controller.js';
+import { refreshUserToken } from './controllers/auth.controller.js';
+
 // Tools
 import Validation from './tools/Validation.js';
+
+// Redis Controller
+import { RedisHandler } from './tools/RedisHandler.js';
 
 
 
@@ -43,7 +50,7 @@ const API_DOMAIN_ROOT = "/api";
 
 // ======== API Endpoints ======== /
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     // Public Routes
     const publicPaths = [
         API_DOMAIN_ROOT + "/Auth/authUser",
@@ -67,15 +74,38 @@ app.use((req, res, next) => {
     try{
         const refreshData = jwt.verify(refresh_token, SECRET_JWT_KEY);   // Verify Refresh Token
         req.refreshSession.currentUser = refreshData;          // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
+        
+        // If access_token isnt available, refresh it
+        if(access_token == undefined){
+            refreshUserToken(req, res); // Refresh token
+            console.log("El usuario ha sido nuevamente autenticado.")
+            return;  // --User may have to retry the requested endpoint--
+        }
+        
         const data = jwt.verify(access_token, SECRET_JWT_KEY);   // Verify Access Token
         req.session.currentUser = data;             // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
-        console.log("- From Current User: ", req.session.currentUser);
+        console.log("- From Current User: ", req.session.currentUser); // Show current user
 
-        // Access Verification by its SystemUserPosition and PositionPrivileges
-        /*
-        if(!await Validation.VerifyUserPrivilege( req.session.currentUser, [ 'Admin' ], res )){ 
-            return ;
-        } */ // Restrict Users by their position and session existence 
+        // -- Access Verification by its SystemUserPosition and PositionPrivileges
+        console.log(await RedisHandler.getCachedValue('positionsEndpoints'));
+        
+
+        // IF not in redis = Get endpoints
+        const [status, position_endpoints] = await getPositionEndpoints(req.session.currentUser.position);
+        
+        if(!status){ // Operation not successfull
+            res.status(403).json({ error: "Hubo un problema al autenitcar al usuario." });
+            return; 
+        }
+        
+        // Endpoints allowed for currentUser
+        const allowedPaths = publicPaths.concat(position_endpoints);
+
+        // If requested path isnt allowd for currentUser then show error 401
+        if(!allowedPaths.includes(req.path)){
+            res.status(401).json({ error: "Usuario No Autorizado." });
+            return;
+        }
 
     } catch {
         // If current Path is Public, let the middleware go on

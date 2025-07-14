@@ -14,6 +14,8 @@ Install server:
     npm install jsonwebtoken
     npm install cookie-parser
     npm install dotenv
+    npm install redis
+    *Instalar Redis en el servidor expuesto en el puerto default 6379*
 
 Pendientes: 
 - Falta refresacar cookie - Completado

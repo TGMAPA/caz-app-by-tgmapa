@@ -52,4 +52,9 @@ router.post('/relatePositionAndEndpoint', relatePrivilegesAndEndpoint);
 router.post('/deleteRelationPrivilegeAndEndpoint', deleteRelationPrivilegeAndEndpoint);
 
 
+// -- User Position - Endpoints --
+// Get every endpoint related with any System User position
+// router.post('/getPositionEndpoints', );
+
+
 export default router;
