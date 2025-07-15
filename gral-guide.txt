@@ -15,7 +15,17 @@ Install server:
     npm install cookie-parser
     npm install dotenv
     npm install redis
+    sudo apt update && sudo apt upgrade -y+
+    sudo apt install redis-server -y
     *Instalar Redis en el servidor expuesto en el puerto default 6379*
+
+#Redis
+sudo service redis-server start  // Start redis
+redis-cli ping // Test redis
+sudo systemctl enable redis-server
+
+WSL For linux environment inside Windows:
+- path: /mnt/d/M.A.P.A/Miguel Pérez/Documentos/M.A.P.A/projects/CAZ/dev/caz-app-by-tgmapa
 
 Pendientes: 
 - Falta refresacar cookie - Completado

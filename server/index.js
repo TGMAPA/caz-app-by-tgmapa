@@ -14,10 +14,7 @@ import authRoutes from './routes/auth.routes.js';
 
 // Controllers
 import { getPositionEndpoints } from './controllers/userPositionsEndpoints.controller.js';
-import { refreshUserToken } from './controllers/auth.controller.js';
-
-// Tools
-import Validation from './tools/Validation.js';
+import { refreshUserToken, KillAuthUser } from './controllers/auth.controller.js';
 
 // Redis Controller
 import { RedisHandler } from './tools/RedisHandler.js';
@@ -44,6 +41,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// API Domain root url
 const API_DOMAIN_ROOT = "/api";
 
 
@@ -57,6 +55,11 @@ app.use(async (req, res, next) => {
         API_DOMAIN_ROOT + "/Auth/refreshUserToken",
 
         // Test Public Routes
+        API_DOMAIN_ROOT + "/SystemUsers/relatePositionAndEndpoint",
+        API_DOMAIN_ROOT + "/SystemUsers/createUserPrivilege",
+        API_DOMAIN_ROOT + "/SystemUsers/relatePositionAndPrivilege",
+        API_DOMAIN_ROOT + "/SystemUsers/deleteRelationPrivilegeAndEndpoint",
+        API_DOMAIN_ROOT + "/SystemUsers/deleteRelationPositionAndPrivilege"
     ];
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP
@@ -65,7 +68,7 @@ app.use(async (req, res, next) => {
     const refresh_token = req.cookies.refresh_token;  // Access to token inside Cookie
 
     req.session = { currentUser: null }; // Initialize data session to null  req.session is accesible from any route
-    req.refreshSession = { currentUser: null } // Initialize data Refresh session to null  req.refreshSession is accesible from any route
+    req.refreshSession = { currentUser: null }; // Initialize data Refresh session to null  req.refreshSession is accesible from any route
 
     console.log("\n");
     console.log("Server Request to :'",req.path,"'");
@@ -78,7 +81,7 @@ app.use(async (req, res, next) => {
         // If access_token isnt available, refresh it
         if(access_token == undefined){
             refreshUserToken(req, res); // Refresh token
-            console.log("El usuario ha sido nuevamente autenticado.")
+            console.log("El usuario ha sido nuevamente autenticado.");
             return;  // --User may have to retry the requested endpoint--
         }
         
@@ -86,16 +89,30 @@ app.use(async (req, res, next) => {
         req.session.currentUser = data;             // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
         console.log("- From Current User: ", req.session.currentUser); // Show current user
 
-        // -- Access Verification by its SystemUserPosition and PositionPrivileges
-        console.log(await RedisHandler.getCachedValue('positionsEndpoints'));
-        
+        // Array for allowed endpoints by User´s Position
+        let position_endpoints = [];
 
-        // IF not in redis = Get endpoints
-        const [status, position_endpoints] = await getPositionEndpoints(req.session.currentUser.position);
+        // -- Access Verification by its SystemUserPosition and PositionPrivileges
+        const getCachedValue = await RedisHandler.getCachedValue('positionsEndpoints:' + req.session.currentUser.position );  // Redis cached values
         
-        if(!status){ // Operation not successfull
-            res.status(403).json({ error: "Hubo un problema al autenitcar al usuario." });
-            return; 
+        if( getCachedValue == null ){ // Positions Endpoints not in cache
+            // IF not in redis then Get endpoints
+            const [status, result] = await getPositionEndpoints(req.session.currentUser.position);
+            
+            if(!status){ // Operation not successfull
+                res.status(403).json({ error: "Hubo un problema al autenitcar al usuario." });
+                return; 
+            }
+            
+            // Store position´s endpoints
+            position_endpoints = result; 
+
+            // Set position_endpoints
+            await RedisHandler.setCachedValue('positionsEndpoints:' + req.session.currentUser.position, JSON.stringify(position_endpoints));
+        }else{
+            // Enpoints stored in redis
+            position_endpoints = JSON.parse(getCachedValue);
+            //console.log("GetCachedValue: ", position_endpoints);
         }
         
         // Endpoints allowed for currentUser
@@ -103,6 +120,7 @@ app.use(async (req, res, next) => {
 
         // If requested path isnt allowd for currentUser then show error 401
         if(!allowedPaths.includes(req.path)){
+            // ========== HERE SESSION COULD BE KILLED ===============
             res.status(401).json({ error: "Usuario No Autorizado." });
             return;
         }
@@ -124,20 +142,9 @@ app.use(async (req, res, next) => {
 app.get('/', (req, res) => {
     res.json(
         {
-            message: 'HolaMundo'
+            message: 'Hola Mundo'
         }
     )
-})
-
-app.get('/protected', async (req, res) => {  // Example Potected Route
-
-  if(!await Validation.VerifyUserPrivilege( req.session.currentUser, [ 'Admin' ], res )){ return } // Restrict Users by their position and session existence 
-  
-  res.json({
-    message: "Bienvenido al panel de administrador",
-    currentUser: req.session.currentUser,
-  });
-
 })
 
 // UserData Routes

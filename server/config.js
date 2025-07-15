@@ -14,6 +14,3 @@ export const REFRESH_TOKEN_SESSION_EXPIRATION_TIME_INT = 10080;  // REFRESH_TOKE
 export const NODE_ENV = 'dev';
 export const REDIS_URL = "redis://"+ DOMAIN +":6379"; // Redis Default Url
 
-
-
-

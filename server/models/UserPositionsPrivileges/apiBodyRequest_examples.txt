@@ -7,7 +7,7 @@ POST http://localhost:3000/api/SystemUsers/relatePositionAndPrivilege
 
 
 // Delete Relation User Position - Privilege
-POST http://localhost:3000/api/SystemUsers/relatePositionAndPrivilege
+POST http://localhost:3000/api/SystemUsers/deleteRelationPositionAndPrivilege
 {
 	"positionID": 1,
     "privilegeID": 1
