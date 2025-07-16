@@ -46,7 +46,7 @@ router.post('/deleteRelationPositionAndPrivilege', deleteRelationPositionAndPriv
 
 //  -- User Privilege - Endpoints --
 // Create Relation User Privilege - Endpoint
-router.post('/relatePositionAndEndpoint', relatePrivilegesAndEndpoint);
+router.post('/relatePrivilegeAndEndpoint', relatePrivilegesAndEndpoint);
 
 // Delete Relation User Privilege - Endpoint
 router.post('/deleteRelationPrivilegeAndEndpoint', deleteRelationPrivilegeAndEndpoint);

@@ -17,7 +17,7 @@ import SystemUser from "../models/SystemUserModel/SystemUser.js" ; // Ssytem Use
 import UserData from '../models/UserDataModel/UserData.js';
 import SessionRefreshToken from '../models/session_refresh_tokens/SessionRefreshTokens.js'
 
-// Tools Functions
+// Tools Functions/SystemUsers/relatePrivilegeAndEndpoint
 import { minutes2milisec, getMySQLDateTime, hashToken } from '../tools/tools.js';
 
 
@@ -182,8 +182,11 @@ export const KillAuthUser = async (req, res) => {
 
 // Function for Refreshing User Session Token 
 export const refreshUserToken = async (req, res) => {
+    
     const refresh_token = req.cookies.refresh_token;
-    if(!refresh_token) return res.status(401).json({ error: "Usuario No Autorizado." }); // Unauthorized error
+    if(!refresh_token || refresh_token === null || refresh_token === undefined ) {
+        return res.status(401).json({ error: "Usuario No Autorizado." })
+    } // Unauthorized error
 
     // Verify if refresh_token isnt revoked, deleted or expired in bd: session_refresh_hash
     const [status, isExpired] = await SessionRefreshToken.isExpired(req.refreshSession.currentUser.id, refresh_token);

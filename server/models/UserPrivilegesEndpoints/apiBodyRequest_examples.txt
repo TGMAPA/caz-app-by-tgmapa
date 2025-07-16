@@ -1,5 +1,5 @@
 // Create Relation Privilege - Endpoint
-Post http://localhost:3000/api/SystemUsers/relatePositionAndEndpoint
+Post http://localhost:3000/api/SystemUsers/relatePrivilegeAndEndpoint
 {
 	"privilegeID": 1,
     "endpoint": "/UserData/createUser"

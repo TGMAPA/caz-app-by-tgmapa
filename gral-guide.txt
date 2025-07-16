@@ -24,9 +24,8 @@ sudo service redis-server start  // Start redis
 redis-cli ping // Test redis
 sudo systemctl enable redis-server
 
-WSL For linux environment inside Windows:
-- path: /mnt/d/M.A.P.A/Miguel Pérez/Documentos/M.A.P.A/projects/CAZ/dev/caz-app-by-tgmapa
 
 Pendientes: 
 - Falta refresacar cookie - Completado
-- Falta implementar acceso dinamico a endpoints segun tablas !!
+- Falta implementar acceso dinamico a endpoints segun tablas !! -- 
+- Falta implementar que al cambiar dinamicamente en tiempo real los privilegios para alguna posicion, se elimine el cache en redis que contiene esa info para forzar el refresco de endpoints permitidos

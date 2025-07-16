@@ -12,6 +12,9 @@ import userDataRoutes from './routes/userdata.routes.js';
 import systemUserRoutes from './routes/systemuser.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
+// Models
+import SessionRefreshToken from './models/session_refresh_tokens/SessionRefreshTokens.js';
+
 // Controllers
 import { getPositionEndpoints } from './controllers/userPositionsEndpoints.controller.js';
 import { refreshUserToken, KillAuthUser } from './controllers/auth.controller.js';
@@ -53,13 +56,10 @@ app.use(async (req, res, next) => {
     const publicPaths = [
         API_DOMAIN_ROOT + "/Auth/authUser",
         API_DOMAIN_ROOT + "/Auth/refreshUserToken",
+        API_DOMAIN_ROOT + "/Auth/KillAuthUser",
 
         // Test Public Routes
-        API_DOMAIN_ROOT + "/SystemUsers/relatePositionAndEndpoint",
-        API_DOMAIN_ROOT + "/SystemUsers/createUserPrivilege",
-        API_DOMAIN_ROOT + "/SystemUsers/relatePositionAndPrivilege",
-        API_DOMAIN_ROOT + "/SystemUsers/deleteRelationPrivilegeAndEndpoint",
-        API_DOMAIN_ROOT + "/SystemUsers/deleteRelationPositionAndPrivilege"
+        
     ];
 
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // Requestor IP
@@ -75,8 +75,15 @@ app.use(async (req, res, next) => {
     console.log("Requestor IP      : ",ip);
 
     try{
+        
         const refreshData = jwt.verify(refresh_token, SECRET_JWT_KEY);   // Verify Refresh Token
-        req.refreshSession.currentUser = refreshData;          // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
+
+        req.refreshSession.currentUser = refreshData;  // Get currentUser Session Data inside jwt (Includes id, userid, username, personalEmail and position) This can be accessed from anywhere in server routes
+        
+        // Verify if refresh_token isnt revoked, deleted or expired in bd: session_refresh_hash
+        const [status, isExpired] = await SessionRefreshToken.isExpired(req.refreshSession.currentUser.id, refresh_token);
+        if(!status) { return res.status(401).json({ error: "Hubo un problema al autenticar al usuario." }) }; // Operation not susccessfull
+        if(isExpired) { return res.status(401).json({ error: "Usuario No Autorizado." }) };  // Session revoked
         
         // If access_token isnt available, refresh it
         if(access_token == undefined){
@@ -121,6 +128,7 @@ app.use(async (req, res, next) => {
         // If requested path isnt allowd for currentUser then show error 401
         if(!allowedPaths.includes(req.path)){
             // ========== HERE SESSION COULD BE KILLED ===============
+            console.log("CurrentUser blocked to desired path...");
             res.status(401).json({ error: "Usuario No Autorizado." });
             return;
         }

@@ -18,7 +18,7 @@ export default function MainScreen(){
         { withCredentials: true }
       )
       navigate("/login");
-    } catch (err) {}
+    } catch (err) {console.log(err)}
   }
 
   const createUser = async () => {

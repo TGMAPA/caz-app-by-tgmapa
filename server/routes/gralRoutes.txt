@@ -1,0 +1,55 @@
+/* ============ AUTH User Endpoints ============ */
+// Auth System User  
+/api/Auth/authUser
+
+// Kill Auth System User
+/api/Auth/KillAuthUser
+
+// Refresh User Token
+/api/Auth/refreshUserToken
+
+/* ============ UserData Endpoints ============ */
+// Create User
+/api/SystemUsers/createUser
+
+// Create User Position
+/api/SystemUsers/createUserPosition
+
+// Create User Privilege
+/api/SystemUsers/createUserPrivilege
+
+// Get all User Privileges
+/api/SystemUsers/getAllUserPrivileges
+
+// Create Relation User Position - Privilege
+/api/SystemUsers/relatePositionAndPrivilege
+
+// Delete Relation User Position - Privilege
+/api/SystemUsers/deleteRelationPositionAndPrivilege
+
+// Create Relation User Privilege - Endpoint
+/api/SystemUsers/relatePrivilegeAndEndpoint
+
+// Delete Relation User Privilege - Endpoint
+/api/SystemUsers/deleteRelationPrivilegeAndEndpoint
+
+
+/* ============ UserData Endpoints ============ */
+// Create User
+/api/UserData/createUser
+
+// Update user
+/api/UserData/updateUser
+
+// Get all users
+/api/UserData/getAllUsers
+
+// Get user by ID
+/api/UserData/getUserByID
+
+// Logical Delete user
+/api/UserData/userLogicalDelete
+
+// Physical Delete user
+/api/UserData/userPhysicalDelete
+
