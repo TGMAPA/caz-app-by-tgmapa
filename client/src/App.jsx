@@ -1,10 +1,14 @@
 // Modules
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Component imports
+// Pages imports
 import LoginPage from "./pages/login/loginPage";
-import MainScreen from "./pages/MainScreen/MainScreen";
-import RoleManager from "./pages/userPrivilegesScreen/RoleManager";
+
+// Main dashboard layout
+import DashboardLayout from "./layouts/DashboardLayout"; 
+import DashboardHome from "./pages/DashboardHome/DashboardHome";
+import RoleManager from "./pages/UserAdminPage/RoleManager";
+import TestScreen from "./pages/testScreen/TestScreen";
 
 // Listeners
 import execListeners from "./listeners/main.listeners";
@@ -18,10 +22,25 @@ function App() {
   return (
     <Router>
       <Routes>
+        
+        {/* Root Page */}
         <Route path="/" element={<LoginPage />} /> 
+
+        {/* Login Page */}
         <Route path="/login" element={<LoginPage />} /> 
-        <Route path="/dashboard" element={<MainScreen />} /> 
-        <Route path="/RoleManager" element={<RoleManager />} /> 
+        
+        {/* Main Dashboard Layout */}
+        <Route path="/dashboard" element={<DashboardLayout />}> 
+          {/* Home Page index for dashboard */}
+          <Route index element={<DashboardHome />} />
+
+          {/* Users Administration */}
+          <Route path="users" element={<RoleManager />} /> 
+
+          {/* Test Screen */}
+          <Route path="testScreen" element={<TestScreen />} /> 
+        </Route>
+
       </Routes>
     </Router>
   )

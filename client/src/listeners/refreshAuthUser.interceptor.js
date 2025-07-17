@@ -11,9 +11,9 @@ export default async function refreshAuthUser(){
         response => response,
         async error => {
             const originalRequest = error.config;
-
+            
             // If error 401 comes from refreshUserToken route, dont retry request
-            if ( originalRequest.url.includes( DOMAIN_URL_SERVER + "/Auth/refreshUserToken" ) || originalRequest._retry ) {
+            if ( originalRequest.url.includes( DOMAIN_URL_SERVER + "/Auth/refreshUserToken" || DOMAIN_URL_SERVER + "/Auth/KillAuthUser" ) || originalRequest._retry ) {
                 // If error, redirect to Login 
                 window.location.href = DOMAIN_URL_CLIENT + "/login";
                 return Promise.reject(error);

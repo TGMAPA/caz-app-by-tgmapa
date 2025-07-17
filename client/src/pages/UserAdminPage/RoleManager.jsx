@@ -37,7 +37,7 @@ const mockPositions = [
   }
 ];
 
-export default function AdminRolesPage() {
+export default function UserAdminPage() {
   const [positions, setPositions] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedPosition, setSelectedPosition] = useState(null);
@@ -100,15 +100,10 @@ export default function AdminRolesPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans">
-      {/* Header */}
-      <header className="flex justify-between items-center p-4 bg-gray-900 text-white">
-        <div className="text-2xl font-bold">Materiales Pérez S.A. de C.V.</div>
-      </header>
 
-      {/* Main Section - Login Form */}
-      <div className="p-8 max-w-6xl mx-auto">
+      <div className="p-8 max-w-6xl mx-auto ">
       
-        <div className="text-sm text-gray-400 mb-2">Administración</div>
+        <div className="text-m text-gray-400 mb-2">Administración de Usuarios del Sistema</div>
         <h1 className="text-2xl font-semibold mb-6">ROLES DE USUARIO</h1>
 
         <div className="flex justify-between items-center mb-4">

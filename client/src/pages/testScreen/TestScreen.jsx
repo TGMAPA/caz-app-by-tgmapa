@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { DOMAIN_URL_SERVER } from '../../config';
 
 
-export default function MainScreen(){
+export default function TestScreen(){
   const navigate = useNavigate();
 
   const LogOut = async () => {
@@ -38,10 +38,11 @@ export default function MainScreen(){
 
   return (
       <div className="min-h-screen flex flex-col font-sans">
-        {/* Header */}
+        {/* Header 
         <header className="flex justify-between items-center p-4 bg-gray-900 text-white">
           <div className="text-2xl font-bold">Materiales Pérez S.A. de C.V.</div>
         </header>
+        */}
   
         {/* Main Section - Login Form */}
         <main  className="flex flex-1 items-center justify-center p-8 bg-no-repeat bg-cover bg-center">
