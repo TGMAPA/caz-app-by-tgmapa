@@ -4,6 +4,7 @@ Install client:
     router-react-dom
     npm install axios
     npm install cors
+    npm install lucide-react
 
 Install server:
     express
