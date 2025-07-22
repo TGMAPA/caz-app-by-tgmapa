@@ -1,11 +1,16 @@
 export default function Header({ onLogout }) {
   return (
-    <header className="flex items-center justify-between px-6 py-4 bg-gray-900 border-b border-gray-700 shadow-md">
-      <h1 className="text-2xl font-semibold text-white tracking-wide">
-        Materiales Pérez S.A. de C.V.
-      </h1>
+    <header className="flex items-center justify-between px-6 py-4 bg-gray-900 border-b border-gray-700 shadow-md gap-4 overflow-hidden">
+      
+      {/* Contenedor flexible que se colapsa si hay poco espacio */}
+      <div className="flex-1 min-w-0 flex justify-center">
+        <h1 className="text-2xl font-semibold text-white tracking-wide whitespace-nowrap overflow-hidden text-ellipsis hidden sm:block">
+          Materiales Pérez S.A. de C.V.
+        </h1>
+      </div>
 
-      <div className="flex items-center gap-4">
+      {/* Botones alineados a la derecha */}
+      <div className="flex-shrink-0 flex items-center gap-4">
         <button className="text-sm text-gray-300 hover:text-white transition">
           Perfil
         </button>

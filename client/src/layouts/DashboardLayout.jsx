@@ -10,6 +10,7 @@ import Sidebar from "../ui-components/Sidebar.jsx";
 import Header from "../ui-components/Header.jsx";
 import Footer from "../ui-components/Footer.jsx";
 
+
 export default function DashboardLayout() {
     const navigate = useNavigate();
     
@@ -34,8 +35,8 @@ export default function DashboardLayout() {
                     <Header onLogout={handleLogout} />
                     <main className="bg-white flex-1 overflow-y-auto p-6">
                         <Outlet />
+                        <Footer />
                     </main>
-                    <Footer />
                 </div>
             </div>
         </>

@@ -7,8 +7,9 @@ import LoginPage from "./pages/login/loginPage";
 // Main dashboard layout
 import DashboardLayout from "./layouts/DashboardLayout"; 
 import DashboardHome from "./pages/DashboardHome/DashboardHome";
-import RoleManager from "./pages/UserAdminPage/RoleManager";
+import UserAdminPage from "./pages/UserAdminPage/RoleManager";
 import TestScreen from "./pages/testScreen/TestScreen";
+import ArticleManager from "./pages/Articles/ArticleManager";
 
 // Listeners
 import execListeners from "./listeners/main.listeners";
@@ -34,8 +35,11 @@ function App() {
           {/* Home Page index for dashboard */}
           <Route index element={<DashboardHome />} />
 
+          {/* Articulos */}
+          <Route path="articles" element={<ArticleManager />} /> 
+
           {/* Users Administration */}
-          <Route path="users" element={<RoleManager />} /> 
+          <Route path="users" element={<UserAdminPage />} /> 
 
           {/* Test Screen */}
           <Route path="testScreen" element={<TestScreen />} /> 

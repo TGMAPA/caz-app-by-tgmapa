@@ -104,11 +104,11 @@ export default function UserAdminPage() {
       <div className="p-8 max-w-6xl mx-auto ">
       
         <div className="text-m text-gray-400 mb-2">Administración de Usuarios del Sistema</div>
-        <h1 className="text-2xl font-semibold mb-6">ROLES DE USUARIO</h1>
+        <h1 className="text-2xl text-black font-semibold mb-6">ROLES DE USUARIO</h1>
 
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-medium">Gestión de Roles</h2>
-          <button onClick={handleAddPosition} className="flex items-center bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 text-sm">
+          <h2 className="text-lg text-black font-medium">Gestión de Roles</h2>
+          <button onClick={handleAddPosition} className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
             <Plus size={16} className="mr-1" /> Añadir Rol
           </button>
         </div>
