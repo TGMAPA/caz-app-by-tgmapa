@@ -1,211 +1,186 @@
 // Modules
-import axios from 'axios';
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Plus, X } from "lucide-react";
+import { SquarePen, ArrowDownUp, Trash, Search } from "lucide-react";
 
 // Server Domain
 import { DOMAIN_URL_SERVER } from '../../config.js';
 
 
-const mockPositions = [
-  {
-    id: 1,
-    name: "admin",
-    description: "Rol con acceso completo a todo el sistema",
-    users: ["Miguel", "Alyson"],
-    privileges: [
-      {
-        id: 1,
-        name: "Crear Usuario",
-        category: "Administración",
-        endpoints: ["/api/UserData/createUser"]
-      },
-      {
-        id: 2,
-        name: "Eliminar Usuario",
-        category: "Administración",
-        endpoints: ["/api/UserData/deleteUser"]
-      },
-      {
-        id: 3,
-        name: "Ver Reportes",
-        category: "Reportes",
-        endpoints: ["/api/Reports/view"]
-      }
-    ]
-  }
-];
-
-export default function UserAdminPage() {
-  const [positions, setPositions] = useState([]);
-  const [search, setSearch] = useState("");
-  const [selectedPosition, setSelectedPosition] = useState(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  useEffect(() => {
-    setPositions(mockPositions);
-  }, []);
-
-  const filteredPositions = positions.filter((role) =>
-    role.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleAddPosition = () => {
-    const name = prompt("Nombre de la nueva posición:");
-    if (!name) return;
-    const newPosition = { id: Date.now(), name, description: "", users: [], privileges: [] };
-    setPositions([...positions, newPosition]);
-  };
-
-  const handleDeletePosition = (id) => {
-    if (confirm("¿Eliminar esta posición?")) {
-      setPositions(positions.filter((p) => p.id !== id));
-    }
-  };
-
-  const handleDeletePrivilege = (privilegeId) => {
-    const updatedPrivileges = selectedPosition.privileges.filter(p => p.id !== privilegeId);
-    const updated = { ...selectedPosition, privileges: updatedPrivileges };
-    setSelectedPosition(updated);
-    setPositions(positions.map(p => p.id === updated.id ? updated : p));
-  };
-
-  const handleAddPrivilege = () => {
-    const name = prompt("Nombre del nuevo privilegio:");
-    const category = prompt("Categoría del privilegio:");
-    const endpoint = prompt("Endpoint asociado:");
-    if (!name || !category || !endpoint) return;
-    const newPriv = {
-      id: Date.now(),
-      name,
-      category,
-      endpoints: [endpoint]
-    };
-    const updated = {
-      ...selectedPosition,
-      privileges: [...selectedPosition.privileges, newPriv]
-    };
-    setSelectedPosition(updated);
-    setPositions(positions.map(p => p.id === updated.id ? updated : p));
-  };
-
-  const groupPrivilegesByCategory = (privileges) => {
-    return privileges.reduce((acc, priv) => {
-      acc[priv.category] = acc[priv.category] || [];
-      acc[priv.category].push(priv);
-      return acc;
-    }, {});
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col font-sans">
-
-      <div className="p-8 max-w-6xl mx-auto ">
-      
-        <div className="text-m text-gray-400 mb-2">Administración de Usuarios del Sistema</div>
-        <h1 className="text-2xl text-black font-semibold mb-6">ROLES DE USUARIO</h1>
-
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg text-black font-medium">Gestión de Roles</h2>
-          <button onClick={handleAddPosition} className="flex items-center bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-sm">
-            <Plus size={16} className="mr-1" /> Añadir Rol
-          </button>
-        </div>
-
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Buscar rol..."
-            className="border border-gray-300 rounded px-3 py-2 text-sm w-full md:w-1/3"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 rounded shadow-sm text-sm">
-            <thead className="bg-gray-100 text-gray-600 uppercase text-xs font-semibold">
-              <tr>
-                <th className="text-left px-4 py-2">Nombre</th>
-                <th className="text-left px-4 py-2">Descripción</th>
-                <th className="text-left px-4 py-2">Usuarios</th>
-                <th className="text-left px-4 py-2">Privilegios</th>
-                <th className="text-center px-4 py-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPositions.map((position) => (
-                <tr key={position.id} className="border-t border-gray-200 hover:bg-gray-50">
-                  <td className="px-4 py-2 font-medium">{position.name}</td>
-                  <td className="px-4 py-2 text-gray-600 truncate max-w-xs">{position.description}</td>
-                  <td className="px-4 py-2">{position.users.length}</td>
-                  <td className="px-4 py-2">{position.privileges.length}</td>
-                  <td className="px-4 py-2 text-center space-x-2">
-                    <button className="text-blue-600 hover:text-blue-800" onClick={() => { setSelectedPosition(position); setDialogOpen(true); }}>Editar</button>
-                    <button className="text-red-500 hover:text-red-700" onClick={() => handleDeletePosition(position.id)}>Eliminar</button>
-                  </td>
-                </tr>
-              ))}
-              {filteredPositions.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="text-center py-4 text-gray-400">No se encontraron roles</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {dialogOpen && selectedPosition && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-start pt-20">
-            <div className="bg-white max-w-3xl w-full rounded-xl p-6 relative">
-              <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-800" onClick={() => setDialogOpen(false)}>
-                <X size={20} />
-              </button>
-              <h2 className="text-xl font-bold mb-4">Privilegios de "{selectedPosition.name}"</h2>
-              <div className="space-y-4">
+export default function RoleManager() {
+  return(
+      <>
+        <div className="relative mx-4 mt-4 overflow-hidden text-slate-700 bg-white rounded-none bg-clip-border">
+            <div className="flex items-center justify-between ">
                 <div>
-                  <h3 className="font-semibold">Usuarios asignados:</h3>
-                  <ul className="text-sm text-gray-700 pl-4 list-disc">
-                    {selectedPosition.users.map((u, idx) => <li key={idx}>{u}</li>)}
-                  </ul>
+                    <h3 className="text-lg font-semibold text-slate-800">Employees List</h3>
+                    <p className="text-slate-500">Review each person before edit</p>
                 </div>
-                <div>
-                  <h3 className="font-semibold">Privilegios:</h3>
-                  <button
-                    onClick={handleAddPrivilege}
-                    className="mb-2 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
-                  >
-                    + Agregar Privilegio
-                  </button>
-                  {Object.entries(groupPrivilegesByCategory(selectedPosition.privileges)).map(([cat, privs]) => (
-                    <div key={cat} className="mb-4">
-                      <h4 className="text-md font-bold text-gray-800">{cat}</h4>
-                      <div className="grid gap-2 mt-1">
-                        {privs.map(priv => (
-                          <div key={priv.id} className="border rounded-xl p-3 bg-gray-100">
-                            <div className="flex justify-between">
-                              <span className="font-semibold">{priv.name}</span>
-                              <button onClick={() => handleDeletePrivilege(priv.id)} className="text-red-600 hover:text-red-800">
-                                <X size={16} />
-                              </button>
-                            </div>
-                            <ul className="text-sm text-gray-700 list-disc pl-4 mt-1">
-                              {priv.endpoints.map((ep, idx) => <li key={idx}>{ep}</li>)}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+                    <button
+                    className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button">
+                    View All
+                    </button>
+                    <button
+                    className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+                        strokeWidth="2" className="w-4 h-4">
+                        <path
+                        d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z">
+                        </path>
+                    </svg>
+                    Add member
+                    </button>
                 </div>
-              </div>
             </div>
-          </div>
-        )}
-      </div>
+            <br/>
+            
+            <div className="mx-3">
+                <div className="w-full max-w-sm min-w-[200px] relative">
+                    <div className="relative">
+                        <input
+                        className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                        placeholder="Buscar un Artículo"
+                        />
+                        <button
+                            className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
+                            type="button"
+                            >
+                            <Search />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    </div>
-   
+        <br />
+
+        {/* Table */}
+        <div className="p-0 overflow-scroll">
+            <table className="w-full mt-4 text-left table-auto min-w-max">
+                {/* Column Heads */}
+                <thead>
+                    <tr>
+                        <th
+                            className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                            <p
+                            className="flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
+                            Member
+                            <ArrowDownUp />
+                            </p>
+                        </th>
+                        <th
+                            className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                            <p
+                            className="flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
+                            Function
+                            <ArrowDownUp />
+                            </p>
+                        </th>
+                        <th
+                            className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                            <p
+                            className="flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
+                            Status
+                            <ArrowDownUp />
+                            </p>
+                        </th>
+                        <th
+                            className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                            <p
+                            className="flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
+                            Employed
+                            <ArrowDownUp />
+                            </p>
+                        </th>
+                        <th
+                            className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                            <p
+                            className="flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
+                            </p>
+                        </th>
+                    </tr>
+                </thead>
+
+                {/* Table Body */}
+                <tbody>
+                    <tr>
+                        <td className="p-4 border-b border-slate-200">
+                            <div className="flex items-center gap-3">
+                            <div className="flex flex-col">
+                                <p className="text-sm font-semibold text-slate-700">
+                                John Michael
+                                </p>
+                                <p
+                                className="text-sm text-slate-500">
+                                john@creative-tim.com
+                                </p>
+                            </div>
+                            </div>
+                        </td>
+                        <td className="p-4 border-b border-slate-200">
+                            <div className="flex flex-col">
+                            <p className="text-sm font-semibold text-slate-700">
+                                Manager
+                            </p>
+                            <p
+                                className="text-sm text-slate-500">
+                                Organization
+                            </p>
+                            </div>
+                        </td>
+                        <td className="p-4 border-b border-slate-200">
+                            <div className="w-max">
+                            <div
+                                className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
+                                <span className="">online</span>
+                            </div>
+                            </div>
+                        </td>
+                        <td className="p-4 border-b border-slate-200">
+                            <p className="text-sm text-slate-500">
+                            23/04/18
+                            </p>
+                        </td>
+                        <td className="p-4 border-b border-slate-200">
+                            <button
+                            className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button">
+                                <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                    <SquarePen />
+                                </span>
+                            </button>
+                            <button
+                            className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button">
+                                <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                    <Trash />
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        {/* Table Pager */}
+        <div className="flex items-center justify-between p-3">
+            <p className="block text-sm text-slate-500">
+            Page 1 of 10
+            </p>
+            <div className="flex gap-1">
+            <button
+                className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button">
+                Previous
+            </button>
+            <button
+                className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button">
+                Next
+            </button>
+            </div>
+        </div>
+      </>
   );
 }

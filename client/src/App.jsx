@@ -7,7 +7,7 @@ import LoginPage from "./pages/login/loginPage";
 // Main dashboard layout
 import DashboardLayout from "./layouts/DashboardLayout"; 
 import DashboardHome from "./pages/DashboardHome/DashboardHome";
-import UserAdminPage from "./pages/UserAdminPage/RoleManager";
+import RoleManager from "./pages/UserAdminPage/RoleManager";
 import TestScreen from "./pages/testScreen/TestScreen";
 import ArticleManager from "./pages/Articles/ArticleManager";
 
@@ -39,7 +39,7 @@ function App() {
           <Route path="articles" element={<ArticleManager />} /> 
 
           {/* Users Administration */}
-          <Route path="users" element={<UserAdminPage />} /> 
+          <Route path="users" element={<RoleManager />} /> 
 
           {/* Test Screen */}
           <Route path="testScreen" element={<TestScreen />} /> 
