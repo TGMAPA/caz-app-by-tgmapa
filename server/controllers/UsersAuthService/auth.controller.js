@@ -6,19 +6,19 @@ import {
     ACCESS_TOKEN_SESSION_EXPIRATION_TIME_INT,
     REFRESH_TOKEN_SESSION_EXPIRATION_TIME_INT,
     NODE_ENV 
-} from '../config.js';
+} from '../../config.js';
 
 // Modules
 import bcrypt from 'bcrypt';  // Hashing passwords
 import jwt from 'jsonwebtoken'; // JWT tokens for sessions
 
 // Models
-import SystemUser from "../models/SystemUserModel/SystemUser.js" ; // Ssytem User Model
-import UserData from '../models/UserDataModel/UserData.js';
-import SessionRefreshToken from '../models/session_refresh_tokens/SessionRefreshTokens.js'
+import SystemUser from "../../models/SystemUserModel/SystemUser.js" ; // Ssytem User Model
+import UserData from '../../models/UserDataModel/UserData.js';
+import SessionRefreshToken from '../../models/session_refresh_tokens/SessionRefreshTokens.js'
 
 // Tools Functions/SystemUsers/relatePrivilegeAndEndpoint
-import { minutes2milisec, getMySQLDateTime, hashToken } from '../tools/tools.js';
+import { minutes2milisec, getMySQLDateTime, hashToken } from '../../tools/tools.js';
 
 
 
@@ -55,8 +55,9 @@ export const authUser = async (req, res) => {
         if( status ){  
             // Operation Successfull
             
-            if( result.length < 0){ // Search username in db
+            if( result.length <= 0){ // Search username in db
                 // Username doesnt exist
+                console.log("Login successfull : ", false);
                 res.status(500).json({ error: "El username no existe." });
                 return;
             }else{
@@ -170,6 +171,7 @@ export const KillAuthUser = async (req, res) => {
     if( !await SessionRefreshToken.revokeSession(req.refreshSession.currentUser.id, req.cookies.refresh_token) ){
         return res.status(401).json({ error: "Usuario No Autorizado." }); // Unauthorized error
     }
+
 
     // Clear cookies
     res

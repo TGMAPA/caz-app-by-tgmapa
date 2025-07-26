@@ -1,5 +1,5 @@
 // User Model
-import UserPrivilegesEndpoints from '../models/UserPrivilegesEndpoints/UserPrivilegesEndpoints.js';
+import UserPrivilegesEndpoints from '../../models/UserPrivilegesEndpoints/UserPrivilegesEndpoints.js';
 
 
 // ===== Controller Functions

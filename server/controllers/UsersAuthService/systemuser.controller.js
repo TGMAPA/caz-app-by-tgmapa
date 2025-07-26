@@ -1,17 +1,20 @@
+// Modules
+import bcrypt from 'bcrypt';  // Hashing passwords
+
 // User Model
-import UserPosition from '../models/UserPosition/UserPosition.js';
+import SystemUser from "../../models/SystemUserModel/SystemUser.js" ;
 
 
 // ===== Controller Functions
 
-// Function to create User Positions and error handling
-export const createUserPosition = async (req, res) => {
+// Function to create a System User and error handling
+export const createUser = async (req, res) => {
     try {
         // Input Data
         const data = req.body;
 
         // Verify username duplicates
-        const [status, result] = await UserPosition.getBy({ name: data.name });
+        const [status, result] = await SystemUser.getBy({ username: data.username });
         
         if( status ){ // Operation Successfull
             // Search possible duplicated values
@@ -19,8 +22,8 @@ export const createUserPosition = async (req, res) => {
             if( result.length > 0 ){ // Possible duplicated values
                 // Search in possible coincidences (Not Logicaly Deleted)
                 for (let i = 0; i < result.length; i++) {
-                    if( result[i].LogDelete != "NULL" && result[i].name === data.name){
-                        // Duplicated Value (Condition: name)
+                    if( result[i].LogDelete != "NULL" && result[i].username === data.username){
+                        // Duplicated Value (Condition: username)
                         duplicatedValue = true;
                     }
                 }
@@ -29,30 +32,32 @@ export const createUserPosition = async (req, res) => {
             // Validate duplicate Existence
             if(!duplicatedValue){
                 // No Duplicate Existence
+                
+                // Hash Password
+                data.password = await bcrypt.hash(data.password, 10);
 
-                // --------- Create new user Position ---------
-                const status = await UserPosition.insert(data);
+                // --------- Create new user ---------
+                const status = await SystemUser.insert(data);
                 if(status){ // If status = true: Insertion Successfull
                     res.json(
                         { 
                             status: status, 
-                            message: 'Posición de Usuario creada exitosamente.'
+                            message: 'Credenciales de Usuario creado exitosamente'
                         }
                     );
                 }else{ // Insertion Not Successfull
-                    res.status(500).json({ error: "Hubo un problema al crear la posición de usuario." });
-                }      
-
+                    res.status(500).json({ error: "Hubo un problema al crear el usuario." });
+                }       
             }else{
                 // Duplicate Existence!!
-                res.status(500).json({ error: "La posición de usuario ya existe en la base de datos." });
+                res.status(500).json({ error: "El username ya esta existe en la base de datos." });
             }
         }else{
            // Operation Not Successfull 
-           res.status(500).json({ error: "Hubo un problema al crear la posición de usuario." });
+           res.status(500).json({ error: "Hubo un problema al crear el usuario." });
         }
     } catch (error) {
         // Return error without the precise message  
-        res.status(500).json({ error: "Hubo un problema al crear la posición de usuario." });
+        res.status(500).json({ error: "Hubo un problema al crear el usuario." });
     }
 };

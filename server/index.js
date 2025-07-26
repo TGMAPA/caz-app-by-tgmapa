@@ -16,8 +16,8 @@ import authRoutes from './routes/auth.routes.js';
 import SessionRefreshToken from './models/session_refresh_tokens/SessionRefreshTokens.js';
 
 // Controllers
-import { getPositionEndpoints } from './controllers/userPositionsEndpoints.controller.js';
-import { refreshUserToken, KillAuthUser } from './controllers/auth.controller.js';
+import { getPositionEndpoints } from './controllers/UsersAuthService/userPositionsEndpoints.controller.js';
+import { refreshUserToken, KillAuthUser } from './controllers/UsersAuthService/auth.controller.js';
 
 // Redis Controller
 import { RedisHandler } from './tools/RedisHandler.js';

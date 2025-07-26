@@ -1,9 +1,15 @@
+// DB Connection
+import MysqlConnection from '../db/MySQL/mysqlConnectionConfig.js';
+
 // Tools
 import { buildWHEREQuerywithDict } from '../tools/tools.js';
 
 
 // "Interface" or abstract class for creating new models using the same base methods
 export default class Model {
+    // DB handler object
+    static db = MysqlConnection;
+
     // Method for Inserting new elements
     async insert(data){}
 

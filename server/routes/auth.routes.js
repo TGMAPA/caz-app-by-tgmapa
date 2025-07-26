@@ -2,7 +2,7 @@
 import express from 'express';
 
 // Controller Functions
-import { authUser, KillAuthUser, refreshUserToken } from '../controllers/auth.controller.js';
+import { authUser, KillAuthUser, refreshUserToken } from '../controllers/UsersAuthService/auth.controller.js';
 
 
 // -- Router Instance for routes handling

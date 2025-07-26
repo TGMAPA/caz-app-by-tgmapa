@@ -1,13 +1,9 @@
-// DB Connection
-import { MysqlConnection } from '../../db/MySQL/mysqlConnectionConfig.js';
-
 // Model Interface
 import Model from '../Model.js';
 
 
 // ----- User Positions Privileges DB Model
 export default class UserPositionsPrivileges extends Model{
-    static db = new MysqlConnection();
     static table = "system_user_positions_privileges";
     
     // Method for Inserting new elements

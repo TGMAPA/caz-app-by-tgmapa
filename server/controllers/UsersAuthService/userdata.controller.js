@@ -1,8 +1,6 @@
 // User Model
-import UserData from "../models/UserDataModel/UserData.js" ;
+import UserData from "../../models/UserDataModel/UserData.js" ;
 
-// Validation tool
-import Validation from "../tools/Validation.js";
 
 // ===== Controller Functions
 

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024); // lg = 1024px
-  const [configOpen, setConfigOpen] = useState(false); // Submenú configuración
+  const [configOpen, setConfigOpen] = useState(false); // Configuration Submenu
+  const [catalogsOpen, setcatalogsOpen] = useState(false); // Catalogs Submenu
 
-  // Escuchar cambios en el tamaño de la ventana
+  // Listen changes in window´s size
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -16,6 +17,7 @@ export default function Sidebar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Function for setting any sidebar option to an active state
   const linkClasses = ({ isActive }) =>
     `block px-4 py-2 rounded hover:bg-gray-700 ${
       isActive ? "bg-gray-700 font-semibold" : ""
@@ -23,7 +25,7 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Botón hamburguesa visible solo si isMobile */}
+      {/* Sidebar´s burger button only visible if it´s Mobile */}
       {isMobile && (
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -59,23 +61,60 @@ export default function Sidebar() {
 
         <ul className="space-y-2 font-medium text-white">
           <nav className="space-y-2">
+
+            {/* Dashboard home page */}
             <li>
               <NavLink to="/dashboard" className={linkClasses}>
                 Inicio
               </NavLink>
             </li>
+            
+            {/* Articles with submenu */}
             <li>
-              <NavLink to="/dashboard/articles" className={linkClasses}>
-                Atrículos
-              </NavLink>
+              <button
+                onClick={() => setcatalogsOpen(!catalogsOpen)}
+                className="w-full text-left px-4 py-2 rounded hover:bg-gray-700 flex justify-between items-center"
+              >
+                Catálogos
+                <span className="ml-2">
+                  {catalogsOpen ? "▾" : "▸"}
+                </span>
+              </button>
+
+              {catalogsOpen && (
+                <ul className="pl-4 mt-1 space-y-1 text-sm">
+                  {/* Groups home */}
+                  <li> 
+                    <NavLink to="/dashboard/catalogs/groups" className={linkClasses}>
+                      Grupos
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/catalogs/lines" className={linkClasses}>
+                      Líneas
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/catalogs/articles" className={linkClasses}>
+                      Atrículos
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/catalogs/unitsOfMeasurement" className={linkClasses}>
+                      Unidades de Medida
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
             </li>
+
             <li>
               <NavLink to="/dashboard/users" className={linkClasses}>
-                Usuarios
+                Usuarios del Sistema
               </NavLink>
             </li>
 
-            {/* Configuración con submenú */}
+            {/* Configuration with submenuú */}
             <li>
               <button
                 onClick={() => setConfigOpen(!configOpen)}
@@ -106,7 +145,7 @@ export default function Sidebar() {
         </ul>
       </div>
 
-      {/* Fondo para cerrar menú en móvil */}
+      {/* Close sidebar menu in mobile */}
       {isMobile && isOpen && (
         <div
           onClick={() => setIsOpen(false)}

@@ -2,11 +2,11 @@
 import express from 'express';
 
 // System User Controller Functions
-import { createUser } from '../controllers/systemuser.controller.js';
-import { createUserPosition } from '../controllers/userPositions.controller.js';
-import { createUserPrivilege, getAllUsers } from '../controllers/userPrivilege.controller.js';
-import { relatePositionAndPrivilege, deleteRelationPositionAndPrivilege } from '../controllers/userPositionsPrivileges.controller.js';
-import { relatePrivilegesAndEndpoint, deleteRelationPrivilegeAndEndpoint } from '../controllers/userPrivilegesEndpoints.controller.js';
+import { createUser } from '../controllers/UsersAuthService/systemuser.controller.js';
+import { createUserPosition } from '../controllers/UsersAuthService/userPositions.controller.js';
+import { createUserPrivilege, getAllUsers } from '../controllers/UsersAuthService/userPrivilege.controller.js';
+import { relatePositionAndPrivilege, deleteRelationPositionAndPrivilege } from '../controllers/UsersAuthService/UserPositionsPrivileges.controller.js';
+import { relatePrivilegesAndEndpoint, deleteRelationPrivilegeAndEndpoint } from '../controllers/UsersAuthService/userPrivilegesEndpoints.controller.js';
 
 
 // -- Router Instance for routes handling

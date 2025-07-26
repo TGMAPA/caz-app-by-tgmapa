@@ -2,7 +2,7 @@
 import express from 'express';
 
 // Controller Functions
-import { getAllUsers, createUser, updateUser, getUserByID, logicDelete, physicalDelete } from '../controllers/userdata.controller.js';
+import { getAllUsers, createUser, updateUser, getUserByID, logicDelete, physicalDelete } from '../controllers/UsersAuthService/userdata.controller.js';
 
 
 // -- Router Instance for routes handling

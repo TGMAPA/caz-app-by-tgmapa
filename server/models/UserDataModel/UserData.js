@@ -1,13 +1,9 @@
-// DB Connection
-import { MysqlConnection } from '../../db/MySQL/mysqlConnectionConfig.js';
-
 // Model Interface
 import Model from '../Model.js';
 
 
 // User DB Model
 export default class UserData extends Model{
-    static db = new MysqlConnection();
     static table = "userdata";
     
     // Method for Inserting new elements

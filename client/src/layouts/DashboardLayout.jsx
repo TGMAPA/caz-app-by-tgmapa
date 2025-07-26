@@ -36,7 +36,6 @@ export default function DashboardLayout() {
                     <main className="bg-white flex-1 overflow-y-auto p-6">
                         <div className="relative flex flex-col w-full h-full text-slate-700 bg-white shadow-md rounded-xl bg-clip-border">
                             <Outlet />
-                            
                         </div>
                         <Footer />
                     </main>

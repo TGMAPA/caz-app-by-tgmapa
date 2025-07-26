@@ -1,13 +1,9 @@
-// DB Connection
-import { MysqlConnection } from '../../db/MySQL/mysqlConnectionConfig.js';
-
 // Model Interface
 import Model from '../Model.js';
 
 
 // ----- System User DB Model
 export default class SystemUser extends Model{
-    static db = new MysqlConnection();
     static table = "systemusers";
     
     // Method for Inserting new elements
@@ -18,7 +14,7 @@ export default class SystemUser extends Model{
             data.username, 
             data.password
         ];
-
+            
         try{
             const query_exec = await this.db.query(query, values);
             if(query_exec.status){ // Query succesfully executed

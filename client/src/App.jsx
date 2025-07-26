@@ -9,7 +9,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardHome from "./pages/DashboardHome/DashboardHome";
 import RoleManager from "./pages/UserAdminPage/RoleManager";
 import TestScreen from "./pages/testScreen/TestScreen";
-import ArticleManager from "./pages/Articles/ArticleManager";
+import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
 
 // Listeners
 import execListeners from "./listeners/main.listeners";
@@ -36,7 +36,7 @@ function App() {
           <Route index element={<DashboardHome />} />
 
           {/* Articulos */}
-          <Route path="articles" element={<ArticleManager />} /> 
+          <Route path="catalogs/articles" element={<ArticleManager />} /> 
 
           {/* Users Administration */}
           <Route path="users" element={<RoleManager />} /> 

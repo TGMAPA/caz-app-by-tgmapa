@@ -1,11 +1,11 @@
 // Db Conecction Logic
-import { MysqlConnection } from '../db/MySQL/mysqlConnectionConfig.js';
+import MysqlConnection from '../../db/MySQL/mysqlConnectionConfig.js';
 
 
 // Function to Get Endpoints from a given Position
 export async function getPositionEndpoints(position){
 
-    const db = new MysqlConnection();
+    const db = MysqlConnection;
     
     // Query For getting every endpoint related with any System User position 
     const query = ` SELECT

@@ -1,9 +1,6 @@
 // Modules
 import bcrypt from 'bcrypt';  
 
-// DB Connection
-import { MysqlConnection } from '../../db/MySQL/mysqlConnectionConfig.js';
-
 // Model Interface
 import Model from '../Model.js';
 
@@ -13,7 +10,6 @@ import { buildWHEREQuerywithDict } from '../../tools/tools.js'
 
 // ----- System User DB Model
 export default class SessionRefreshToken extends Model{
-    static db = new MysqlConnection();
     static table = "session_refresh_tokens";
     
     // Method for Inserting new elements
