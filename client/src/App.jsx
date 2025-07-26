@@ -10,6 +10,9 @@ import DashboardHome from "./pages/DashboardHome/DashboardHome";
 import RoleManager from "./pages/UserAdminPage/RoleManager";
 import TestScreen from "./pages/testScreen/TestScreen";
 import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
+import GroupsManager from "./pages/Catalogs/Groups/GroupsManager";
+import LinesManager from "./pages/Catalogs/Lines/LinesManager";
+import UnitsOfMeasurmentManager from "./pages/Catalogs/UnitsOfMeasurement/UnitsOfMeasurementManager";
 
 // Listeners
 import execListeners from "./listeners/main.listeners";
@@ -35,7 +38,16 @@ function App() {
           {/* Home Page index for dashboard */}
           <Route index element={<DashboardHome />} />
 
-          {/* Articulos */}
+          {/* Groups */}
+          <Route path="catalogs/groups" element={<GroupsManager />} /> 
+
+          {/* Lines */}
+          <Route path="catalogs/lines" element={<LinesManager />} /> 
+
+          {/* Units Of Measurement */}
+          <Route path="catalogs/unitsOfMeasurement" element={<UnitsOfMeasurmentManager />} /> 
+
+          {/* Articles */}
           <Route path="catalogs/articles" element={<ArticleManager />} /> 
 
           {/* Users Administration */}

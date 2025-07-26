@@ -85,8 +85,8 @@ app.use(async (req, res, next) => {
         if(!status) { return res.status(401).json({ error: "Hubo un problema al autenticar al usuario." }) }; // Operation not susccessfull
         if(isExpired) { return res.status(401).json({ error: "Usuario No Autorizado." }) };  // Session revoked
         
-        // If access_token isnt available, refresh it
-        if(access_token == undefined){
+        // If access_token isnt available, refresh it unless user its trying to close its session
+        if(access_token == undefined && req.path != API_DOMAIN_ROOT + "/Auth/KillAuthUser"){
             refreshUserToken(req, res); // Refresh token
             console.log("El usuario ha sido nuevamente autenticado.");
             return;  // --User may have to retry the requested endpoint--

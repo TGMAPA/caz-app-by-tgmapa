@@ -2,9 +2,9 @@
 import { SquarePen, ArrowDownUp, Trash, Search, Plus } from "lucide-react";
 
 
-export default function ArticleManager() {
+export default function LinesManager() {
     // Main title in page
-    const titlename = "Artículo"
+    const titlename = "Línea"
 
     return( 
         <>  
@@ -12,8 +12,8 @@ export default function ArticleManager() {
             <div className="relative mx-4 mt-4 overflow-hidden text-slate-700 bg-white rounded-none bg-clip-border">
                 <div className="flex items-center justify-between ">
                     <div>
-                        <h3 className="text-lg font-semibold text-slate-800">Lista de Categoría: {titlename}</h3>
-                        <p className="text-slate-500">Visualiza la Lista de Articulos de tu Negocio</p>
+                        <h3 className="text-lg font-semibold text-slate-800">Lista de Categoría: {titlename} </h3>
+                        <p className="text-slate-500">Visualiza la Lista de la Categoría de Lineas para los Artículos de tu Negocio</p>
                     </div>
                     <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
                         <button
@@ -28,11 +28,11 @@ export default function ArticleManager() {
                 
                 {/* Search Bar */}
                 <div className="flex centermx-3">
-                    <div className="w-full max-w-sm min-w-[200px] relative">
+                    <div className="w-full max-w-sm  relative">
                         <div className="relative">
                             <input
                             className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                            placeholder={"Buscar " + titlename}
+                            placeholder= {"Buscar " + titlename}
                             />
                             <button
                                 className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
@@ -56,14 +56,6 @@ export default function ArticleManager() {
                                 className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
                                 <p
                                 className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
-                                Clave
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
                                 Nombre
                                 <ArrowDownUp />
                                 </p>
@@ -71,56 +63,8 @@ export default function ArticleManager() {
                             <th
                                 className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
                                 <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Linea
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
+                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
                                 Grupo
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Unidad de Medida
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Costo
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Precio de Venta
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Fecha de Creación
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Estado
                                 <ArrowDownUp />
                                 </p>
                             </th>
@@ -141,58 +85,17 @@ export default function ArticleManager() {
                                 <div className="flex items-center gap-3 justify-center h-full">
                                     <div className="flex flex-col text-center">
                                         <p className="text-sm font-semibold text-slate-700">
-                                        BT001
+                                            Bultos
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             <td className="p-4 border-b border-slate-200">
-                                <div className="flex flex-col justify-center h-full text-center">
-                                    <p className="text-sm font-semibold text-slate-700">
-                                        CEMENTO CRUZ AZUL 50 KG
-                                    </p>
-                                </div>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
                                 <p className="text-sm text-slate-500 text-center">
-                                BULTOS
+                                    Materiales
                                 </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                Materiales
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                BULTO 50 KG
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                $150.00
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                $200.00
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                23/04/18
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200 text-center align-middle">
-                                <div className="inline-block">
-                                    <div
-                                        className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
-                                        <span>Disponible</span>
-                                    </div>
-                                </div>
                             </td>
                             
-
 
                             <td className="p-4 border-b border-slate-200 ">
                                 <div className="flex justify-center items-center gap-2">
@@ -210,9 +113,9 @@ export default function ArticleManager() {
                                             <Trash />
                                         </span>
                                     </button>
-
                                 </div>
                             </td>
+
                         </tr>
                     </tbody>
                 </table>
