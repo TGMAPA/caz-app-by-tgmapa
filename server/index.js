@@ -8,9 +8,10 @@ import jwt from 'jsonwebtoken'; // JWT tokens for sessions
 import { PORT, SECRET_JWT_KEY } from './config.js';
 
 // Routes
-import userDataRoutes from './routes/userdata.routes.js';
-import systemUserRoutes from './routes/systemuser.routes.js';
-import authRoutes from './routes/auth.routes.js';
+import userDataRoutes from './routes/UsersAuthService/userdata.routes.js';
+import systemUserRoutes from './routes/UsersAuthService/systemuser.routes.js';
+import authRoutes from './routes/UsersAuthService/auth.routes.js';
+import catalogsRoutes from './routes/BusinessLogic/Catalogs/catalogs.routes.js';
 
 // Models
 import SessionRefreshToken from './models/session_refresh_tokens/SessionRefreshTokens.js';
@@ -47,10 +48,7 @@ app.use(cors(corsOptions));
 // API Domain root url
 const API_DOMAIN_ROOT = "/api";
 
-
-
-// ======== API Endpoints ======== /
-
+// System initializer 
 app.use(async (req, res, next) => {
     // Public Routes
     const publicPaths = [
@@ -146,6 +144,10 @@ app.use(async (req, res, next) => {
     next(); // Go on to the next route or middleware
 })
 
+// =================================================================
+// ========================= API Endpoints ========================= \
+// =================================================================
+
 // Root Endpoint
 app.get('/', (req, res) => {
     res.json(
@@ -155,6 +157,9 @@ app.get('/', (req, res) => {
     )
 })
 
+
+
+// ================== User System and Auth Routes ==================
 // UserData Routes
 app.use(API_DOMAIN_ROOT + '/UserData', userDataRoutes); 
 
@@ -163,8 +168,23 @@ app.use(API_DOMAIN_ROOT + '/SystemUsers', systemUserRoutes);
 
 // SystemUsers Routes
 app.use(API_DOMAIN_ROOT + '/Auth', authRoutes); 
+// ================== User System and Auth Routes ==================
 
-// ======== API Endpoints ======== \
+
+
+
+// ========================= Business Logic ========================
+// Inventory Management (CRUD for Articles, Lines, Groups, UnitsOfMeasurement)
+app.use(API_DOMAIN_ROOT + '/Catalogs', catalogsRoutes) 
+
+// ========================= Business Logic ========================
+
+
+
+// =================================================================
+// ========================= API Endpoints ========================= /
+// =================================================================
+
 
 
 // Server Port Configuration
