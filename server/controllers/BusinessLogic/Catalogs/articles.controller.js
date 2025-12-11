@@ -48,11 +48,11 @@ export const getAllArticles = async (req, res) => {
 export const getArticleByID = async (req, res) => {
     try {
         const id = req.body.id;
-        const [status, Article] = await Article.getByID(id);
+        const [status, Result] = await Article.getByID(id);
         if(status){ // Operation Succesfull|
             res.json(
                 { 
-                    Article: Article, 
+                    Article: Result, 
                     message: 'Se obtuvo el Artículo exitosamente.' 
                 }
             );
@@ -61,6 +61,26 @@ export const getArticleByID = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ error: "Hubo un problema al obtener el Artículo." });
+    }
+};
+
+// Function to get all the Articles in db and error handling
+export const getArticleBy = async (req, res) => {
+    try {
+        const [status, Result] = await Article.getBy(req.body);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    Article: Result, 
+                    message: 'Se obtuvo el artículo exitosamente.' 
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al obtener el artículo." });
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Hubo un problema al obtener el artículo." });
     }
 };
 
@@ -102,6 +122,26 @@ export const ArticlelogicDelete = async (req, res) => {
         }  
     } catch (error) {
         res.status(500).json({ error: "Hubo un problema al eliminar el Artículo." });
+    }
+};
+
+// Function to restore a Logic Elimination of a Article and error handling
+export const RestoreArticle = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const status = await Article.restore(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    status: status,
+                    message: 'Artículo restaurado exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al restaurar el Artículo." });
+        }  
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al restaurar el Artículo." });
     }
 };
 

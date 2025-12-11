@@ -10,7 +10,8 @@ import {
     updateGroup,  
     GrouplogicDelete, 
     GroupphysicalDelete,
-    getGroupBy
+    getGroupBy,
+    RestoreGroup
 } from '../../../controllers/BusinessLogic/Catalogs/groups.controller.js';
 
 // Lines Controller
@@ -20,7 +21,9 @@ import {
     getLineByID, 
     updateLine,  
     LinelogicDelete, 
-    LinephysicalDelete 
+    LinephysicalDelete,
+    getLineBy,
+    RestoreLine
 } from '../../../controllers/BusinessLogic/Catalogs/lines.controller.js';
 
 // Articles Controller
@@ -30,7 +33,9 @@ import {
     getArticleByID, 
     updateArticle,  
     ArticlelogicDelete, 
-    ArticlephysicalDelete 
+    ArticlephysicalDelete,
+    getArticleBy,
+    RestoreArticle
 } from '../../../controllers/BusinessLogic/Catalogs/articles.controller.js';
 
 
@@ -59,6 +64,9 @@ router.post('/updateGroup', updateGroup);
 // Logical Delete Group
 router.post('/groupLogicalDelete', GrouplogicDelete);
 
+// Restore Group
+router.post('/groupRestore', RestoreGroup);
+
 // Physical Delete Group
 router.post('/groupPhysicalDelete', GroupphysicalDelete);
 
@@ -73,11 +81,17 @@ router.post('/getAllLines', getAllLines);
 // Get Line by ID
 router.post('/getLineByID', getLineByID);
 
+// Get Line by filter
+router.post('/getLineBy', getLineBy);
+
 // Update Line
 router.post('/updateLine', updateLine);
 
 // Logical Delete Line
 router.post('/lineLogicalDelete', LinelogicDelete);
+
+// Restore Line
+router.post('/lineRestore', RestoreLine);
 
 // Physical Delete Line
 router.post('/linePhysicalDelete', LinephysicalDelete);
@@ -94,11 +108,17 @@ router.post('/getAllArticles', getAllArticles);
 // Get Article by ID
 router.post('/getArticleByID', getArticleByID);
 
+// Get Article by filter
+router.post('/getArticleBy', getArticleBy);
+
 // Update Article
 router.post('/updateArticle', updateArticle);
 
 // Logical Delete Article
 router.post('/articleLogicalDelete', ArticlelogicDelete);
+
+// Restore Article
+router.post('/articleRestore', RestoreArticle);
 
 // Physical Delete Article
 router.post('/articlePhysicalDelete', ArticlephysicalDelete);

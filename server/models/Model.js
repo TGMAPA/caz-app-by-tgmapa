@@ -60,6 +60,17 @@ export default class Model {
         } catch(error) { return false } // Return false status: ERROR
     }
 
+    // Method for restoring logically deleted elements
+    static async restore(id){
+        const sql = `UPDATE ${this.table} SET LogDelete = NULL WHERE id = ${id};`;
+        try{
+            const query_exec = await this.db.query(sql);
+            if(query_exec.status){ // Query succesfully executed
+                return true; // Return True status
+            }else{ return false } // Query Not succesfully executed: Erro}
+        } catch(error) { return false } // Return false status: ERROR
+    }
+
     // Method for deleting elements in a physical way
     static async physicalDelete(id){
         const sql = `DELETE FROM ${this.table} WHERE id = ${id};`;

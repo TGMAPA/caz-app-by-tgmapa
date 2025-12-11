@@ -68,7 +68,7 @@ export const getGroupByID = async (req, res) => {
 export const getGroupBy = async (req, res) => {
     try {
         const [status, Result] = await Group.getBy(req.body);
-        if(status){ // Operation Succesfull|
+        if(status){ // Operation Succesfull
             res.json(
                 { 
                     Group: Result, 
@@ -122,6 +122,26 @@ export const GrouplogicDelete = async (req, res) => {
         }  
     } catch (error) {
         res.status(500).json({ error: "Hubo un problema al eliminar el Grupo." });
+    }
+};
+
+// Function to restore a Logic Elimination of a Group and error handling
+export const RestoreGroup = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const status = await Group.restore(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    status: status,
+                    message: 'Grupo restaurado exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al restaurar el Grupo." });
+        }  
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al restaurar el Grupo." });
     }
 };
 
