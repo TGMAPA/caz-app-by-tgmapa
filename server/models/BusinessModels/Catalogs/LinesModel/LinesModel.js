@@ -1,10 +1,25 @@
 // Model Interface
 import Model from '../../../Model.js';
 
+// Group Model 
+import Group from '../../Catalogs/GroupsModel/GroupsModel.js'
+
 
 // Lines Model
 export default class Line extends Model{
     static table = "inventory_lines";
+
+    // Columns for getall method join query
+    static columns = `
+        ${this.table}.*,
+        ${Group.table}.name AS groupName,
+        ${Group.table}.LogDelete AS groupDeleted
+    `;
+
+    // JOIN with groups even if deleted (LEFT JOIN)
+    static joins = `
+        LEFT JOIN ${Group.table} ON ${Group.table}.id = ${this.table}.groupID
+    `;
     
     // Method for Inserting new elements
     static async insert(data){

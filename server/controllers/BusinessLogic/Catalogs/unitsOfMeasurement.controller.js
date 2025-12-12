@@ -5,7 +5,7 @@ import UnitsOfMeasurement from "../../../models/BusinessModels/Catalogs/UnitsOfM
 // ===== Controller Functions
 
 // Function to create a UnitsOfMeasurement and error handling
-export const createUnitsOfMeasurement = async (req, res) => {
+export const createUnitOfMeasurement = async (req, res) => {
     try {
         const data = req.body;
         const status = await UnitsOfMeasurement.insert(data);
@@ -26,7 +26,7 @@ export const createUnitsOfMeasurement = async (req, res) => {
 };
 
 // Function to get all the UnitsOfMeasurements in db and error handling
-export const getAllUnitsOfMeasurements = async (req, res) => {
+export const getAllUnitsOfMeasurement = async (req, res) => {
     try {
         const [status, UnitsOfMeasurements] = await UnitsOfMeasurement.getAll();
         if(status){ // Operation Succesfull
@@ -45,7 +45,7 @@ export const getAllUnitsOfMeasurements = async (req, res) => {
 };
 
 // Function to get all the UnitsOfMeasurements in db and error handling
-export const getUnitsOfMeasurementByID = async (req, res) => {
+export const getUnitOfMeasurementByID = async (req, res) => {
     try {
         const id = req.body.id;
         const [status, UnitsOfMeasurement] = await UnitsOfMeasurement.getByID(id);

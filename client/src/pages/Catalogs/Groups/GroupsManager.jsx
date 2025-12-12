@@ -64,7 +64,6 @@ export default function GroupsManager() {
 
             fetchGroups();
         } catch (err) {
-            console.error(err);
             alert("Error al eliminar el grupo.");
         }
     };
@@ -82,7 +81,6 @@ export default function GroupsManager() {
 
             fetchGroups();
         } catch (err) {
-            console.error(err);
             alert("Error al restaurar el grupo.");
         }
     };
@@ -100,7 +98,6 @@ export default function GroupsManager() {
 
             fetchGroups();
         } catch (err) {
-            console.error(err);
             alert("Error al eliminar permanentemente el grupo.");
         }
     };
@@ -120,7 +117,7 @@ export default function GroupsManager() {
                         <p className="text-slate-500">
                             {mode === "active" 
                                 ? "Visualiza y administra los grupos activos" 
-                                : "Grupos eliminados lógicamente (Papelera)"}
+                                : "Papelera de Grupos eliminados"}
                         </p>
                     </div>
 
@@ -194,6 +191,7 @@ export default function GroupsManager() {
 
                         {filteredGroups.map((group) => (
                             <tr key={group.id}>
+                                {/* Group's name */}
                                 <td className="p-4 border-b border-slate-200">
                                     <div className="flex justify-center">
                                         <p className="text-sm font-semibold text-slate-700">
@@ -202,10 +200,11 @@ export default function GroupsManager() {
                                     </div>
                                 </td>
 
+                                {/* Actions over element */}
                                 <td className="p-4 border-b border-slate-200">
                                     <div className="flex justify-center items-center gap-2">
 
-                                        {/* Editar (solo activos) */}
+                                        {/* Edit active elements */}
                                         {mode === "active" && (
                                             <button
                                                 className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
@@ -215,7 +214,7 @@ export default function GroupsManager() {
                                             </button>
                                         )}
 
-                                        {/* Enviar a papelera */}
+                                        {/* Move to trah can */}
                                         {mode === "active" && (
                                             <button
                                                 className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
@@ -225,7 +224,7 @@ export default function GroupsManager() {
                                             </button>
                                         )}
 
-                                        {/* Restaurar desde papelera */}
+                                        {/* Restore from trash can */}
                                         {mode === "trash" && (
                                             <button
                                                 className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
@@ -235,7 +234,7 @@ export default function GroupsManager() {
                                             </button>
                                         )}
 
-                                        {/* Eliminar físico */}
+                                        {/* Hard delete */}
                                         {mode === "trash" && (
                                             <button
                                                 className="relative h-10 w-10 rounded-lg hover:bg-red-100"
@@ -252,9 +251,23 @@ export default function GroupsManager() {
                 </table>
             </div>
 
-            {/* Pager Placeholder */}
+            {/* Table Pager */}
             <div className="flex items-center justify-between p-3">
-                <p className="text-sm text-slate-500">Page 1 of 1</p>
+                <p className="block text-sm text-slate-500">
+                Page 1 of 10
+                </p>
+                <div className="flex gap-1">
+                <button
+                    className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button">
+                    Previous
+                </button>
+                <button
+                    className="rounded border border-slate-300 py-2.5 px-3 text-center text-xs font-semibold text-slate-600 transition-all hover:opacity-75 focus:ring focus:ring-slate-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button">
+                    Next
+                </button>
+                </div>
             </div>
         </>
     );

@@ -29,6 +29,8 @@ import EditGroup from "./pages/Catalogs/Groups/EditGroup";
 
 // Lines
 import LinesManager from "./pages/Catalogs/Lines/LinesManager";
+import CreateLine from "./pages/Catalogs/Lines/CreateLine";
+import EditLine from "./pages/Catalogs/Lines/EditLine";
 
 // Articles
 import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
@@ -60,7 +62,6 @@ function App() {
 
           {/* Groups */}
           <Route path="catalogs/groups" element={<GroupsManager />} /> 
-
           {/* Create Groups */}
           <Route path="catalogs/groups/CreateGroup" element={<CreateGroup />} /> 
           <Route path="catalogs/groups/edit/:id" element={<EditGroup />} />
@@ -68,6 +69,9 @@ function App() {
 
           {/* Lines */}
           <Route path="catalogs/lines" element={<LinesManager />} /> 
+          {/* Create Lines */}
+          <Route path="catalogs/lines/CreateLine" element={<CreateLine />} /> 
+          <Route path="catalogs/lines/edit/:id" element={<EditLine />} />
 
 
           {/* Units Of Measurement */}

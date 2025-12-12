@@ -38,6 +38,18 @@ import {
     RestoreArticle
 } from '../../../controllers/BusinessLogic/Catalogs/articles.controller.js';
 
+// // UnitOfMeasurement Controller
+// import { 
+//     createUnitOfMeasurement, 
+//     getAllUnitsOfMeasurement, 
+//     getUnitOfMeasurementByID, 
+//     updateUnitOfMeasurement,  
+//     unitOfMeasurementlogicDelete, 
+//     unitOfMeasurementphysicalDelete,
+//     getUnitOfMeasurementBy,
+//     RestoreunitOfMeasurement
+// } from '../../../controllers/BusinessLogic/Catalogs/unitsOfMeasurement.controller.js';
+
 
 
 // -- Router Instance for routes handling
@@ -122,6 +134,34 @@ router.post('/articleRestore', RestoreArticle);
 
 // Physical Delete Article
 router.post('/articlePhysicalDelete', ArticlephysicalDelete);
+
+
+
+// // ----- UnitOfMeasurement -----
+// // Create UnitOfMeasurement
+// router.post('/createUnitOfMeasurement', createUnitOfMeasurement);
+
+// // Get All UnitOfMeasurement
+// router.post('/getAllUnitsOfMeasurement', getAllUnitsOfMeasurement);
+
+// // Get UnitOfMeasurement by ID
+// router.post('/getUnitOfMeasurementByID', getUnitOfMeasurementByID);
+
+// // Get UnitOfMeasurement by filter
+// router.post('/getUnitOfMeasurementBy', getUnitOfMeasurementBy);
+
+// // Update UnitOfMeasurement
+// router.post('/updateUnitOfMeasurement', updateUnitOfMeasurement);
+
+// // Logical Delete UnitOfMeasurement
+// router.post('/unitOfMeasurementLogicalDelete', unitOfMeasurementlogicDelete);
+
+// // Restore unitOfMeasurement
+// router.post('/unitOfMeasurementRestore', RestoreunitOfMeasurement);
+
+// // Physical Delete unitOfMeasurement
+// router.post('/unitOfMeasurementPhysicalDelete', unitOfMeasurementphysicalDelete);
+
 
 // =============== Catalogs Routes
 

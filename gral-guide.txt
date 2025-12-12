@@ -30,3 +30,5 @@ Pendientes:
 - Falta refresacar cookie - Completado
 - Falta implementar acceso dinamico a endpoints segun tablas !! -- 
 - Falta implementar que al cambiar dinamicamente en tiempo real los privilegios para alguna posicion, se elimine el cache en redis que contiene esa info para forzar el refresco de endpoints permitidos
+
+- Falta iplementar restircción a la eliminación fisica de grupos y catalogos superiores sin antes verificar subcategorias existentes asociadas

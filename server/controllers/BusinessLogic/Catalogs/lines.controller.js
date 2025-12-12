@@ -145,7 +145,6 @@ export const RestoreLine = async (req, res) => {
     }
 };
 
-
 // Function to Logic Delete a Line and error handling
 export const LinephysicalDelete = async (req, res) => {
     try {

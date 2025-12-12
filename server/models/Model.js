@@ -16,9 +16,15 @@ export default class Model {
     // Method for updating elements
     async update(id, data){}
 
-    // Method for geting all elements
+    // Method for geting all elements, also with joins if available
     static async getAll(){
-        const query = 'SELECT * FROM ' + this.table + ';';
+        // DEFAULT: *
+        const columns = this.columns || '*';
+
+        // DEFAULT: no JOIN
+        const joins = this.joins || '';
+
+        const query = `SELECT ${columns} FROM ${this.table} ${joins};`;
         try{
             const query_exec = await this.db.query(query)
             if(query_exec.status){ // Query succesfully executed
