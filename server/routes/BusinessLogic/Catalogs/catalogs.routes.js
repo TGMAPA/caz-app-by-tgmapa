@@ -38,17 +38,17 @@ import {
     RestoreArticle
 } from '../../../controllers/BusinessLogic/Catalogs/articles.controller.js';
 
-// // UnitOfMeasurement Controller
-// import { 
-//     createUnitOfMeasurement, 
-//     getAllUnitsOfMeasurement, 
-//     getUnitOfMeasurementByID, 
-//     updateUnitOfMeasurement,  
-//     unitOfMeasurementlogicDelete, 
-//     unitOfMeasurementphysicalDelete,
-//     getUnitOfMeasurementBy,
-//     RestoreunitOfMeasurement
-// } from '../../../controllers/BusinessLogic/Catalogs/unitsOfMeasurement.controller.js';
+// UnitOfMeasurement Controller
+import { 
+    createUnitOfMeasurement, 
+    getAllUnitsOfMeasurement, 
+    getUnitOfMeasurementByID, 
+    updateUnitsOfMeasurement,  
+    UnitsOfMeasurementlogicDelete, 
+    UnitsOfMeasurementphysicalDelete,
+    getUnitOfMeasurementBy,
+    RestoreUnitsOfMeasurement
+} from '../../../controllers/BusinessLogic/Catalogs/unitsOfMeasurement.controller.js';
 
 
 
@@ -137,30 +137,30 @@ router.post('/articlePhysicalDelete', ArticlephysicalDelete);
 
 
 
-// // ----- UnitOfMeasurement -----
-// // Create UnitOfMeasurement
-// router.post('/createUnitOfMeasurement', createUnitOfMeasurement);
+// ----- UnitOfMeasurement -----
+// Create UnitOfMeasurement
+router.post('/createUnitOfMeasurement', createUnitOfMeasurement);
 
-// // Get All UnitOfMeasurement
-// router.post('/getAllUnitsOfMeasurement', getAllUnitsOfMeasurement);
+// Get All UnitOfMeasurement
+router.post('/getAllUnitsOfMeasurement', getAllUnitsOfMeasurement);
 
-// // Get UnitOfMeasurement by ID
-// router.post('/getUnitOfMeasurementByID', getUnitOfMeasurementByID);
+// Get UnitOfMeasurement by ID
+router.post('/getUnitOfMeasurementByID', getUnitOfMeasurementByID);
 
-// // Get UnitOfMeasurement by filter
-// router.post('/getUnitOfMeasurementBy', getUnitOfMeasurementBy);
+// Get UnitOfMeasurement by filter
+router.post('/getUnitOfMeasurementBy', getUnitOfMeasurementBy);
 
-// // Update UnitOfMeasurement
-// router.post('/updateUnitOfMeasurement', updateUnitOfMeasurement);
+// Update UnitOfMeasurement
+router.post('/updateUnitOfMeasurement', updateUnitsOfMeasurement);
 
-// // Logical Delete UnitOfMeasurement
-// router.post('/unitOfMeasurementLogicalDelete', unitOfMeasurementlogicDelete);
+// Logical Delete UnitOfMeasurement
+router.post('/unitOfMeasurementLogicalDelete', UnitsOfMeasurementlogicDelete);
 
-// // Restore unitOfMeasurement
-// router.post('/unitOfMeasurementRestore', RestoreunitOfMeasurement);
+// Restore unitOfMeasurement
+router.post('/unitOfMeasurementRestore', RestoreUnitsOfMeasurement);
 
-// // Physical Delete unitOfMeasurement
-// router.post('/unitOfMeasurementPhysicalDelete', unitOfMeasurementphysicalDelete);
+// Physical Delete unitOfMeasurement
+router.post('/unitOfMeasurementPhysicalDelete', UnitsOfMeasurementphysicalDelete);
 
 
 // =============== Catalogs Routes

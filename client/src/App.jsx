@@ -36,7 +36,7 @@ import EditLine from "./pages/Catalogs/Lines/EditLine";
 import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
 
 // Units of Measurement
-import UnitsOfMeasurmentManager from "./pages/Catalogs/UnitsOfMeasurement/UnitsOfMeasurementManager";
+import UnitsOfMeasurementManager from "./pages/Catalogs/UnitsOfMeasurement/UnitsOfMeasurementManager";
 
 
 
@@ -75,7 +75,7 @@ function App() {
 
 
           {/* Units Of Measurement */}
-          <Route path="catalogs/unitsOfMeasurement" element={<UnitsOfMeasurmentManager />} /> 
+          <Route path="catalogs/unitsOfMeasurement" element={<UnitsOfMeasurementManager />} /> 
 
 
           {/* Articles */}

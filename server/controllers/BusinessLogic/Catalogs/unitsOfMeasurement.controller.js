@@ -64,6 +64,26 @@ export const getUnitOfMeasurementByID = async (req, res) => {
     }
 };
 
+// Function to get some UnitsOfMeasurement in db and error handling
+export const getUnitOfMeasurementBy = async (req, res) => {
+    try {
+        const [status, Result] = await UnitsOfMeasurement.getBy(req.body);
+        if(status){ // Operation Succesfull
+            res.json(
+                {
+                    UnitsOfMeasurement: Result, 
+                    message: 'Se obtuvo la UnitsOfMeasurement exitosamente.' 
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al obtener la UnitsOfMeasurement." });
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Hubo un problema al obtener la UnitsOfMeasurement." });
+    }
+};
+
 // Function to update a UnitsOfMeasurement and error handling
 export const updateUnitsOfMeasurement = async (req, res) => {
     try {
@@ -102,6 +122,26 @@ export const UnitsOfMeasurementlogicDelete = async (req, res) => {
         }  
     } catch (error) {
         res.status(500).json({ error: "Hubo un problema al eliminar la UnitsOfMeasurement." });
+    }
+};
+
+// Function to restore a Logic Elimination of a UnitsOfMeasurement and error handling
+export const RestoreUnitsOfMeasurement = async (req, res) => {
+    try {
+        const id = req.body.id;
+        const status = await UnitsOfMeasurement.restore(id);
+        if(status){ // Operation Succesfull
+            res.json(
+                { 
+                    status: status,
+                    message: 'UnitsOfMeasurement restaurada exitosamente'
+                }
+            );
+        }else{ // Operation Not Succesfull
+            res.status(500).json({ error: "Hubo un problema al restaurar la UnitsOfMeasurement." });
+        }  
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un problema al restaurar la UnitsOfMeasurement." });
     }
 };
 

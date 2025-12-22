@@ -1,126 +1,256 @@
 // Modules
-import { SquarePen, ArrowDownUp, Trash, Search, Plus } from "lucide-react";
+import { SquarePen, ArrowDownUp, Trash, Search, Plus, RotateCcw } from "lucide-react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+// Server Domain
+import { DOMAIN_URL_SERVER } from '../../../config.js';
 
 
-export default function UnitsOfMeasurmentManager() {
-    // Main title in page
-    const titlename = "Unidad de Medida"
 
-    return( 
-        <>  
+export default function UnitsOfMeasurementManager() {
+
+    const navigate = useNavigate();
+
+    // States
+    const [UnitsOfMeasurement, setUnitsOfMeasurement] = useState([]);
+    const [search, setSearch] = useState("");
+
+    // mode = "active" → active elements view
+    // mode = "trash" → trash elements view
+    const [mode, setMode] = useState("active"); 
+    
+
+    // Fetch UnitsOfMeasurement ----------------------------
+    const fetchUnitsOfMeasurement = async () => {
+        try {
+            const response = await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/getAllUnitsOfMeasurement",
+                {},
+                { withCredentials: true }
+            );
+            // Set UnitsOfMeasurement from response
+            setUnitsOfMeasurement(response.data.UnitsOfMeasurements);
+
+        } catch (error) {
+            console.error("Error al cargar las Unidades de Medida disponibles.");
+        }
+    };
+
+     // Load UnitsOfMeasurement from backend ----------------------------
+    useEffect(() => {
+        fetchUnitsOfMeasurement();
+    }, []);
+
+    // Filter UnitsOfMeasurement ----------------------------
+    const filteredUnitsOfMeasurement = UnitsOfMeasurement
+        .filter(UoM => mode === "active"
+            ? UoM.LogDelete === null 
+            : UoM.LogDelete !== null
+        )
+        .filter(UoM => UoM.name.toLowerCase().includes(search.toLowerCase()));
+
+    // LogicDelete -----------------------
+    const handleDelete = async (id) => {
+        if (!confirm("¿Seguro que deseas enviar a papelera esta Unidad de Medida?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/unitOfMeasurementLogicalDelete",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchUnitsOfMeasurement();
+        } catch (err) {
+            alert("Error al eliminar la Unidad de Medida.");
+        }
+    };
+
+    // Restore UnitOfMeasurement (undo delete) -----------------------
+    const handleRestore = async (id) => {
+        if (!confirm("¿Restaurar la Unidad de Medida?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/unitOfMeasurementRestore",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchUnitsOfMeasurement();
+        } catch (err) {
+            alert("Error al restaurar la Unidad de Medida.");
+        }
+    };
+
+    // Physical Delete (delete hard) -----------------------
+    const handlePhysicalDelete = async (id) => {
+        if (!confirm("Esta acción eliminará la Unidad de Medida PERMANENTEMENTE. ¿Deseas Continuar?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/unitOfMeasurementPhysicalDelete",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchUnitsOfMeasurement();
+        } catch (err) {
+            alert("Error al eliminar permanentemente la Unidad de Medida.");
+        }
+    };
+
+
+    // ----- Frontend
+    return (
+        <>
             {/* Page Title */}
             <div className="relative mx-4 mt-4 overflow-hidden text-slate-700 bg-white rounded-none bg-clip-border">
-                <div className="flex items-center justify-between ">
-                    <div>
-                        <h3 className="text-lg font-semibold text-slate-800">Lista de Categoría: {titlename} </h3>
-                        <p className="text-slate-500">Visualiza la Lista de la Categoría de {titlename} para los Artículos de tu Negocio</p>
-                    </div>
-                    <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
-                        <button
-                            className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                            type="button">
-                            <Plus />
-                            Añadir {titlename}
-                        </button>
-                    </div>
-                </div>
-                <br/>
-                
-                {/* Search Bar */}
-                <div className="flex centermx-3">
-                    <div className="w-full max-w-sm  relative">
-                        <div className="relative">
-                            <input
-                            className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                            placeholder= {"Buscar " + titlename}
-                            />
-                            <button
-                                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-                                type="button"
-                                >
-                                <Search />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h3 className="text-lg font-semibold text-slate-800">
+                            Gestión de Unidades de Medida {mode === "trash" && "(Papelera)"}
+                        </h3>
+                        <p className="text-slate-500">
+                            {mode === "active" 
+                                ? "Visualiza y administra las Unidades de Medida activos" 
+                                : "Papelera de Unidades de Medida eliminados"}
+                        </p>
+                    </div>
+
+                    <div className="flex gap-2">
+
+                        {/* Toggle Active / Trash */}
+                        <button
+                            className="flex items-center gap-2 rounded bg-slate-600 py-2.5 px-4 text-xs font-semibold text-white shadow transition-all hover:bg-slate-700"
+                            onClick={() => setMode(mode === "active" ? "trash" : "active")}
+                        >
+                            {mode === "active" ? "Ver Papelera" : "Ver Activos"}
+                        </button>
+
+                        {/* Add UnitOfMeasurement */}
+                        {mode === "active" && (
+                            <button
+                                className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow transition-all hover:shadow-lg hover:shadow-slate-900/20"
+                                onClick={() => navigate("/dashboard/catalogs/UnitsOfMeasurement/CreateGroup")}
+                            >
+                                <Plus />
+                                Añadir Unidad de Medida
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Search Bar */}
+                <div className="flex centermx-3 mt-4">
+                    <div className="w-full max-w-sm relative">
+                        <input
+                            className="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition-all"
+                            placeholder="Buscar una Unidad de Medida"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <span className="absolute h-8 w-8 right-1 top-1 flex items-center justify-center">
+                            <Search />
+                        </span>
+                    </div>
+                </div>
+
+                <br />
+            </div>
 
             {/* Table */}
             <div className="p-0 overflow-scroll">
                 <table className="w-full mt-4 text-left table-auto min-w-max">
-                    {/* Column Heads */}
+
+                    {/* Header */}
                     <thead>
                         <tr>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
+                            <th className="p-4 border-y border-slate-200 bg-slate-50">
+                                <p className="flex items-center justify-center gap-2 text-sm font-normal text-slate-500">
                                     Nombre
                                     <ArrowDownUp />
                                 </p>
                             </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
-                                    Abreviación
-                                    <ArrowDownUp />
-                                </p>
-                            </th>
-
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                </p>
-                            </th>
+                            <th className="p-4 border-y border-slate-200 bg-slate-50"></th>
                         </tr>
                     </thead>
 
-                    {/* Table Body */}
+                    {/* Body */}
                     <tbody>
-                        <tr>
-                            <td className="p-4 border-b border-slate-200">
-                                <div className="flex items-center gap-3 justify-center h-full">
-                                    <div className="flex flex-col text-center">
+                        {filteredUnitsOfMeasurement.length === 0 && (
+                            <tr>
+                                <td colSpan="2" className="p-4 text-center text-slate-500">
+                                    No hay Unidades de Medida para mostrar
+                                </td>
+                            </tr>
+                        )}
+
+                        {filteredUnitsOfMeasurement.map((UoM) => (
+                            <tr key={UoM.id}>
+                                {/* UoM's name */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
                                         <p className="text-sm font-semibold text-slate-700">
-                                            Tonelada
+                                            {UoM.name}
                                         </p>
                                     </div>
-                                </div>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                    ton
-                                </p>
-                            </td>
-                            
+                                </td>
 
-                            <td className="p-4 border-b border-slate-200 ">
-                                <div className="flex justify-center items-center gap-2">
-                                    <button
-                                    className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
-                                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                            <SquarePen />
-                                        </span>
-                                    </button>
-                                    <button
-                                    className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
-                                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                            <Trash />
-                                        </span>
-                                    </button>
-                                </div>
-                            </td>
+                                {/* Actions over element */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center items-center gap-2">
 
-                        </tr>
+                                        {/* Edit active elements */}
+                                        {mode === "active" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => navigate(`/dashboard/Catalogs/UnitsOfMeasurement/edit/${UoM.id}`)}
+                                            >
+                                                <SquarePen />
+                                            </button>
+                                        )}
+
+                                        {/* Move to trah can */}
+                                        {mode === "active" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => handleDelete(UoM.id)}
+                                            >
+                                                <Trash />
+                                            </button>
+                                        )}
+
+                                        {/* Restore from trash can */}
+                                        {mode === "trash" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => handleRestore(UoM.id)}
+                                            >
+                                                <RotateCcw />
+                                            </button>
+                                        )}
+
+                                        {/* Hard delete */}
+                                        {mode === "trash" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-red-100"
+                                                onClick={() => handlePhysicalDelete(UoM.id)}
+                                            >
+                                                <Trash />
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
-            
+
             {/* Table Pager */}
             <div className="flex items-center justify-between p-3">
                 <p className="block text-sm text-slate-500">
@@ -139,7 +269,6 @@ export default function UnitsOfMeasurmentManager() {
                 </button>
                 </div>
             </div>
-        
         </>
     );
 }
