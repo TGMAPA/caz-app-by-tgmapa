@@ -37,7 +37,8 @@ import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
 
 // Units of Measurement
 import UnitsOfMeasurementManager from "./pages/Catalogs/UnitsOfMeasurement/UnitsOfMeasurementManager";
-
+import CreateUnitsOfMeasurement from "./pages/Catalogs/UnitsOfMeasurement/CreateUnitsOfMeasurement";
+import EditUnitsOfMeasurement from "./pages/Catalogs/UnitsOfMeasurement/EditUnitsOfMeasurement";
 
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           <Route path="catalogs/groups" element={<GroupsManager />} /> 
           {/* Create Groups */}
           <Route path="catalogs/groups/CreateGroup" element={<CreateGroup />} /> 
+          {/* Update Groups */}
           <Route path="catalogs/groups/edit/:id" element={<EditGroup />} />
 
 
@@ -71,11 +73,16 @@ function App() {
           <Route path="catalogs/lines" element={<LinesManager />} /> 
           {/* Create Lines */}
           <Route path="catalogs/lines/CreateLine" element={<CreateLine />} /> 
+          {/* Update Lines */}
           <Route path="catalogs/lines/edit/:id" element={<EditLine />} />
 
 
           {/* Units Of Measurement */}
           <Route path="catalogs/unitsOfMeasurement" element={<UnitsOfMeasurementManager />} /> 
+          {/* Create Unit of Measurement */}
+          <Route path="catalogs/unitsOfMeasurement/CreateUnitsOfMeasurement" element={<CreateUnitsOfMeasurement />} /> 
+          {/* Update Unit of Measurement */}
+          <Route path="catalogs/unitsOfMeasurement/edit/:id" element={<EditUnitsOfMeasurement />} />
 
 
           {/* Articles */}

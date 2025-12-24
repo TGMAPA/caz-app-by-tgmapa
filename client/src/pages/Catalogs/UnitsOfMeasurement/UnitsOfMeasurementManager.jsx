@@ -135,7 +135,7 @@ export default function UnitsOfMeasurementManager() {
                         {mode === "active" && (
                             <button
                                 className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow transition-all hover:shadow-lg hover:shadow-slate-900/20"
-                                onClick={() => navigate("/dashboard/catalogs/UnitsOfMeasurement/CreateGroup")}
+                                onClick={() => navigate("/dashboard/catalogs/unitsOfMeasurement/CreateUnitsOfMeasurement")}
                             >
                                 <Plus />
                                 Añadir Unidad de Medida
@@ -175,9 +175,17 @@ export default function UnitsOfMeasurementManager() {
                                     <ArrowDownUp />
                                 </p>
                             </th>
+                            <th className="p-4 border-y border-slate-200 bg-slate-50">
+                                <p className="flex items-center justify-center gap-2 text-sm font-normal text-slate-500">
+                                    Abreviación
+                                    <ArrowDownUp />
+                                </p>
+                            </th>
                             <th className="p-4 border-y border-slate-200 bg-slate-50"></th>
                         </tr>
+                        
                     </thead>
+                    
 
                     {/* Body */}
                     <tbody>
@@ -200,6 +208,15 @@ export default function UnitsOfMeasurementManager() {
                                     </div>
                                 </td>
 
+                                {/* UoM's abbreviation */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {UoM.abbreviation}
+                                        </p>
+                                    </div>
+                                </td>
+
                                 {/* Actions over element */}
                                 <td className="p-4 border-b border-slate-200">
                                     <div className="flex justify-center items-center gap-2">
@@ -208,7 +225,7 @@ export default function UnitsOfMeasurementManager() {
                                         {mode === "active" && (
                                             <button
                                                 className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
-                                                onClick={() => navigate(`/dashboard/Catalogs/UnitsOfMeasurement/edit/${UoM.id}`)}
+                                                onClick={() => navigate(`/dashboard/Catalogs/unitsOfMeasurement/edit/${UoM.id}`)}
                                             >
                                                 <SquarePen />
                                             </button>
