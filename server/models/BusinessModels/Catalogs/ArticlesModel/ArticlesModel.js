@@ -1,10 +1,44 @@
 // Model Interface
 import Model from '../../../Model.js';
 
+// Group Model 
+import Group from '../../Catalogs/GroupsModel/GroupsModel.js'
+
+// Line Model 
+import Line from '../../Catalogs/LinesModel/LinesModel.js'
+
+// UnitsOfMeasurement Model 
+import UnitsOfMeasurement from '../../Catalogs/UnitsOfMeasurementModel/UnitsOfMeasurementModel.js'
+
 
 // Articles Model
 export default class Article extends Model{
     static table = "inventory_articles";
+
+    // Columns for getall method join query
+        static columns = `
+            ${this.table}.*,
+
+            ${UnitsOfMeasurement.table}.abbreviation AS unitName,
+            ${UnitsOfMeasurement.table}.LogDelete AS unitDeleted,
+
+            ${Line.table}.name AS lineName,
+            ${Line.table}.LogDelete AS lineDeleted,
+
+            ${Group.table}.name AS groupName,
+            ${Group.table}.LogDelete AS groupDeleted
+        `;
+    
+        static joins = `
+            LEFT JOIN ${UnitsOfMeasurement.table}
+                ON ${UnitsOfMeasurement.table}.id = ${this.table}.measurementUnit
+
+            LEFT JOIN ${Line.table}
+                ON ${Line.table}.id = ${this.table}.lineID
+
+            LEFT JOIN ${Group.table}
+                ON ${Group.table}.id = ${Line.table}.groupID
+        `;
     
     // Method for Inserting new elements
     static async insert(data){

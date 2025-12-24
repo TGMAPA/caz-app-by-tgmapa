@@ -39,7 +39,7 @@ app.use(cookieParser());
 
 // Cors Policy
 const corsOptions = {
-    origin : ["http://localhost:5173"],
+    origin : ["http://localhost:5173", 'http://192.168.30.4:5173'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials : true
 };
@@ -188,6 +188,6 @@ app.use(API_DOMAIN_ROOT + '/Catalogs', catalogsRoutes)
 
 
 // Server Port Configuration
-app.listen(PORT, () => {
+app.listen(3000, '0.0.0.0', () => {
     console.log('Server running on port '+ PORT + '...');
 })

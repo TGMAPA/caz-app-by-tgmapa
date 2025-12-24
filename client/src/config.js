@@ -2,4 +2,4 @@
 
 export const DOMAIN_URL_SERVER = import.meta.env.VITE_API_URL;
 export const DOMAIN_URL_CLIENT = 'http://localhost:5173';  // In Dev Mode, must be the same server domain, different port. In Production may be the same SERVER and CLIENT
-    
+//export const DOMAIN_URL_CLIENT = 'http://192.168.30.4:5173'; 

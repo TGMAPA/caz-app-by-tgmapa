@@ -1,48 +1,274 @@
 // Modules
-import { SquarePen, ArrowDownUp, Trash, Search, Plus } from "lucide-react";
+import { SquarePen, ArrowDownUp, Trash, Search, Plus, RotateCcw } from "lucide-react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
+// Server Domain
+import { DOMAIN_URL_SERVER } from '../../../config.js';
 
 
-export default function ArticleManager() {
-    // Main title in page
-    const titlename = "Artículo"
 
+export default function ArticlesManager() {
+
+    const navigate = useNavigate();
+
+    // States
+    const [articles, setArticles] = useState([]);
+    const [search, setSearch] = useState("");
+
+    // mode = "active" → active elements view
+    // mode = "trash" → trash elements view
+    const [mode, setMode] = useState("active"); 
+
+    // Filters
+    const [filterName, setFilterName] = useState("");
+    const [filterMeasurementUnit, setfilterMeasurementUnit] = useState("");
+    const [filterLine, setFilterLine] = useState("");
+    const [filterState, setFilterState] = useState("");
+    const [filterGroup, setFilterGroup] = useState("");
+
+     // Fetch Articles ----------------------------
+    const fetchArticles = async () => {
+        try {
+            const response = await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/getAllArticles",
+                {},
+                { withCredentials: true }
+            );
+            // Set Articles from response
+            setArticles(response.data.Articles);
+
+        } catch (error) {
+            console.error("Error al cargar los artículos disponibles.");
+        }
+    };
+
+     // Load Articles from backend ----------------------------
+    useEffect(() => {
+        fetchArticles();
+    }, []);
+
+    // Unique Values --------------------------
+    const uniqueNames = [...new Set(articles.map(art => art.name))];
+    const uniqueMeasurementUnit = [...new Set(articles.map(art => art.unitName))];
+    const uniqueLines = [...new Set(articles.map(art => art.lineName))];
+    const uniqueGroups = [...new Set(articles.map(art => art.groupName))];
+
+    const stateMap = {
+        0: "Descontinuado",
+        1: "Activo"
+    };
+
+    const uniqueStates = [
+        ...new Set(articles.map(art => stateMap[art.discontinued]))
+    ];
+    
+    // Filter Articles ----------------------------
+    const filteredArticles = articles
+        // Active or Trash view
+        .filter(article => mode === "active"
+            ? article.LogDelete === null 
+            : article.LogDelete !== null
+        )
+        // Search
+        .filter(article =>
+            article.name.toLowerCase().includes(search.toLowerCase())
+        )
+        // Filter by Name
+        .filter(article =>
+            filterName ? article.name === filterName : true
+        )
+        // Filter by uniqueMeasurementUnit
+        .filter(article =>
+            filterMeasurementUnit ? article.unitName === filterMeasurementUnit : true
+        )
+        // Filter by Line
+        .filter(article =>
+            filterLine ? article.lineName === filterLine : true
+        )
+        // Filter by Group
+        .filter(article =>
+            filterGroup ? article.groupName === filterGroup : true
+        )
+        // Filter by State
+        .filter(article =>
+            filterState ? stateMap[article.discontinued] === filterState : true
+        );
+
+    // LogicDelete -----------------------
+    const handleDelete = async (id) => {
+        if (!confirm("¿Seguro que deseas enviar a papelera este Artículo?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/articleLogicalDelete",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchArticles();
+        } catch (err) {
+            alert("Error al eliminar el Artículo.");
+        }
+    };
+
+    // Restore Article (undo delete) -----------------------
+    const handleRestore = async (id) => {
+        if (!confirm("¿Restaurar el Artículo?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/articleRestore",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchArticles();
+        } catch (err) {
+            alert("Error al restaurar el Artículo.");
+        }
+    };
+
+    // Physical Delete (delete hard) -----------------------
+    const handlePhysicalDelete = async (id) => {
+        if (!confirm("Esta acción eliminará el Artículo PERMANENTEMENTE. ¿Deseas Continuar?")) return;
+
+        try {
+            await axios.post(
+                DOMAIN_URL_SERVER + "/Catalogs/articlePhysicalDelete",
+                { id },
+                { withCredentials: true }
+            );
+
+            fetchArticles();
+        } catch (err) {
+            console.error(err);
+            alert("Error al eliminar permanentemente el Artículo.");
+        }
+    };
+
+
+    // ----- Frontend
     return( 
         <>  
             {/* Page Title */}
-            <div className="relative mx-4 mt-4 overflow-hidden text-slate-700 bg-white rounded-none bg-clip-border">
-                <div className="flex items-center justify-between ">
-                    <div>
-                        <h3 className="text-lg font-semibold text-slate-800">Lista de Categoría: {titlename}</h3>
-                        <p className="text-slate-500">Visualiza la Lista de Articulos de tu Negocio</p>
-                    </div>
-                    <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
-                        <button
-                            className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                            type="button">
-                            <Plus />
-                            Añadir {titlename}
-                        </button>
-                    </div>
-                </div>
-                <br/>
-                
-                {/* Search Bar */}
-                <div className="flex centermx-3">
-                    <div className="w-full max-w-sm min-w-[200px] relative">
-                        <div className="relative">
-                            <input
-                            className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                            placeholder={"Buscar " + titlename}
-                            />
+                <div className="relative mx-4 mt-4 overflow-hidden text-slate-700 bg-white rounded-none bg-clip-border">
+
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-lg font-semibold text-slate-800">
+                                Gestión de Artículos {mode === "trash" && "(Papelera)"}
+                            </h3>
+                            <p className="text-slate-500">
+                                {mode === "active" 
+                                    ? "Visualiza y administra las Artículos activos" 
+                                    : "Papelera de Artículos eliminados"}
+                            </p>
+                        </div>
+
+                        <div className="flex gap-2">
+
+                            {/* Toggle Active / Trash */}
                             <button
-                                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-                                type="button"
-                                >
-                                <Search />
+                                className="flex items-center gap-2 rounded bg-slate-600 py-2.5 px-4 text-xs font-semibold text-white shadow transition-all hover:bg-slate-700"
+                                onClick={() => setMode(mode === "active" ? "trash" : "active")}
+                            >
+                                {mode === "active" ? "Ver Papelera" : "Ver Activos"}
                             </button>
+
+                            {/* Add Article */}
+                            {mode === "active" && (
+                                <button
+                                    className="flex select-none items-center gap-2 rounded bg-slate-800 py-2.5 px-4 text-xs font-semibold text-white shadow transition-all hover:shadow-lg hover:shadow-slate-900/20"
+                                    onClick={() => navigate("/dashboard/catalogs/articles/CreateArticle")}
+                                >
+                                    <Plus />
+                                    Añadir Artículo
+                                </button>
+                            )}
                         </div>
                     </div>
+                
+                {/* Search + Filters */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mx-3 mt-4">
+
+                    {/* Search Bar */}
+                    <div className="w-full relative">
+                        <input
+                            className="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition-all"
+                            placeholder="Buscar un Artículo"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                        <span className="absolute h-8 w-8 right-1 top-1 flex items-center justify-center">
+                            <Search />
+                        </span>
+                    </div>
+
+                    {/* Filter Name */}
+                    <select
+                        className="bg-white w-full h-10 px-3 text-sm border border-slate-200 rounded shadow-sm"
+                        value={filterName}
+                        onChange={(e) => setFilterName(e.target.value)}
+                    >
+                        <option value="">Filtrar por Nombre</option>
+                        {uniqueNames.map((name, i) => (
+                            <option key={i} value={name}>{name}</option>
+                        ))}
+                    </select>
+
+                    {/* Filter UNitOfMeasurement */}
+                    <select
+                        className="bg-white w-full h-10 px-3 text-sm border border-slate-200 rounded shadow-sm"
+                        value={filterMeasurementUnit}
+                        onChange={(e) => setfilterMeasurementUnit(e.target.value)}
+                    >
+                        <option value="">Filtrar por Unidad de Medida</option>
+                        {uniqueMeasurementUnit.map((g, i) => (
+                            <option key={i} value={g}>{g}</option>
+                        ))}
+                    </select>
+
+                    {/* Filter Line */}
+                    <select
+                        className="bg-white w-full h-10 px-3 text-sm border border-slate-200 rounded shadow-sm"
+                        value={filterGroup}
+                        onChange={(e) => setFilterLine(e.target.value)}
+                    >
+                        <option value="">Filtrar por Línea</option>
+                        {uniqueLines.map((g, i) => (
+                            <option key={i} value={g}>{g}</option>
+                        ))}
+                    </select>
+
+                    {/* Filter Group */}
+                    <select
+                        className="bg-white w-full h-10 px-3 text-sm border border-slate-200 rounded shadow-sm"
+                        value={filterGroup}
+                        onChange={(e) => setFilterGroup(e.target.value)}
+                    >
+                        <option value="">Filtrar por Grupo</option>
+                        {uniqueGroups.map((g, i) => (
+                            <option key={i} value={g}>{g}</option>
+                        ))}
+                    </select>
+
+                    {/* Filter State */}
+                    <select
+                        className="bg-white w-full h-10 px-3 text-sm border border-slate-200 rounded shadow-sm"
+                        value={filterState}
+                        onChange={(e) => setFilterState(e.target.value)}
+                    >
+                        <option value="">Filtrar por Estado</option>
+                        {uniqueStates.map((g, i) => (
+                            <option key={i} value={g}>{g}</option>
+                        ))}
+                    </select>
+
                 </div>
+
+                <br />
             </div>
 
 
@@ -72,7 +298,15 @@ export default function ArticleManager() {
                                 className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
                                 <p
                                 className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Linea
+                                Unidad de Medida
+                                <ArrowDownUp />
+                                </p>
+                            </th>
+                            <th
+                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
+                                <p
+                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm font-normal leading-none text-slate-500">
+                                Línea
                                 <ArrowDownUp />
                                 </p>
                             </th>
@@ -81,14 +315,6 @@ export default function ArticleManager() {
                                 <p
                                 className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
                                 Grupo
-                                <ArrowDownUp />
-                                </p>
-                            </th>
-                            <th
-                                className="p-4 transition-colors cursor-pointer border-y border-slate-200 bg-slate-50 hover:bg-slate-100">
-                                <p
-                                className="justify-center h-full flex items-center justify-between gap-2 font-sans text-sm  font-normal leading-none text-slate-500">
-                                Unidad de Medida
                                 <ArrowDownUp />
                                 </p>
                             </th>
@@ -134,86 +360,164 @@ export default function ArticleManager() {
                         </tr>
                     </thead>
 
-                    {/* Table Body */}
+                   {/* Body */}
                     <tbody>
-                        <tr>
-                            <td className="p-4 border-b border-slate-200">
-                                <div className="flex items-center gap-3 justify-center h-full">
-                                    <div className="flex flex-col text-center">
+                        {filteredArticles.length === 0 && (
+                            <tr>
+                                <td colSpan="3" className="p-4 text-center text-slate-500">
+                                    No hay Artículos para mostrar
+                                </td>
+                            </tr>
+                        )}
+                        {/* Show elements in table */}
+                        {filteredArticles.map((article) => (
+                            <tr key={article.id}>
+                                {/* article Business Key */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
                                         <p className="text-sm font-semibold text-slate-700">
-                                        BT001
+                                            {article.keyID}
                                         </p>
                                     </div>
-                                </div>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <div className="flex flex-col justify-center h-full text-center">
-                                    <p className="text-sm font-semibold text-slate-700">
-                                        CEMENTO CRUZ AZUL 50 KG
-                                    </p>
-                                </div>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                BULTOS
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                Materiales
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                BULTO 50 KG
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                $150.00
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                $200.00
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200">
-                                <p className="text-sm text-slate-500 text-center">
-                                23/04/18
-                                </p>
-                            </td>
-                            <td className="p-4 border-b border-slate-200 text-center align-middle">
-                                <div className="inline-block">
-                                    <div
-                                        className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
-                                        <span>Disponible</span>
+                                </td>
+
+                                {/* article Name */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.name}
+                                        </p>
                                     </div>
-                                </div>
-                            </td>
-                            
+                                </td>
 
 
-                            <td className="p-4 border-b border-slate-200 ">
-                                <div className="flex justify-center items-center gap-2">
-                                    <button
-                                    className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
-                                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                            <SquarePen />
-                                        </span>
-                                    </button>
-                                    <button
-                                    className="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button">
-                                        <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                            <Trash />
-                                        </span>
-                                    </button>
+                                {/* Article Unit of Measurement */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.unitName}
+                                            {article.unitDeleted && (
+                                                <span className="text-red-500 text-xs font-normal">  (Unidad de Medida Descontinuada / Eliminada)</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                </td>
 
-                                </div>
-                            </td>
-                        </tr>
+                                {/* Article Line */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.lineName}
+                                            {article.lineDeleted && (
+                                                <span className="text-red-500 text-xs font-normal">  (Grupo Descontinuado / Eliminado)</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                </td>
+
+                                {/* Article Group */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.groupName}
+                                            {article.groupDeleted && (
+                                                <span className="text-red-500 text-xs font-normal">  (Grupo Descontinuado / Eliminado)</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                </td>
+
+                                {/* Article Cost */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.cost}
+                                        </p>
+                                    </div>
+                                </td>
+
+                                {/* Article Selling price */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {article.sellingPrice}
+                                        </p>
+                                    </div>
+                                </td>
+
+                                {/* Article Creation date */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <p className="text-sm font-semibold text-slate-700">
+                                            {new Date(article.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                </td>
+
+                                {/* Article State */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center">
+                                        <div className="inline-block">
+                                            {article.discontinued == 1 ? (
+                                                <div className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-green-900 uppercase rounded-md select-none whitespace-nowrap bg-green-500/20">
+                                                    <span>Activo</span>
+                                                </div>
+                                            ) : (
+                                                <div className="relative grid items-center px-2 py-1 font-sans text-xs font-bold text-red-900 uppercase rounded-md select-none whitespace-nowrap bg-red-500/20">
+                                                    <span>Descontinuado</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {/* Actions over element */}
+                                <td className="p-4 border-b border-slate-200">
+                                    <div className="flex justify-center items-center gap-2">
+
+                                        {/* Edit active elements */}
+                                        {mode === "active" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => navigate(`/dashboard/Catalogs/article/edit/${article.id}`)}
+                                            >
+                                                <SquarePen />
+                                            </button>
+                                        )}
+
+                                        {/* Move to trah can */}
+                                        {mode === "active" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => handleDelete(article.id)}
+                                            >
+                                                <Trash />
+                                            </button>
+                                        )}
+
+                                        {/* Restore from trash can */}
+                                        {mode === "trash" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-slate-900/10"
+                                                onClick={() => handleRestore(article.id)}
+                                            >
+                                                <RotateCcw />
+                                            </button>
+                                        )}
+
+                                        {/* Hard delete */}
+                                        {mode === "trash" && (
+                                            <button
+                                                className="relative h-10 w-10 rounded-lg hover:bg-red-100"
+                                                onClick={() => handlePhysicalDelete(article.id)}
+                                            >
+                                                <Trash />
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

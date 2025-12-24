@@ -34,6 +34,8 @@ import EditLine from "./pages/Catalogs/Lines/EditLine";
 
 // Articles
 import ArticleManager from "./pages/Catalogs/Articles/ArticleManager";
+import CreateArticle from "./pages/Catalogs/Articles/CreateArticle";
+import EditArticle from "./pages/Catalogs/Articles/EditArticle";
 
 // Units of Measurement
 import UnitsOfMeasurementManager from "./pages/Catalogs/UnitsOfMeasurement/UnitsOfMeasurementManager";
@@ -87,7 +89,11 @@ function App() {
 
           {/* Articles */}
           <Route path="catalogs/articles" element={<ArticleManager />} /> 
-
+          {/* Create Articles */}
+          <Route path="catalogs/articles/CreateArticle" element={<CreateArticle />} /> 
+          {/* Update Articles */}
+          <Route path="catalogs/articles/edit/:id" element={<EditArticle />} /> 
+          
 
           {/* Users Administration */}
           <Route path="users" element={<RoleManager />} /> 

@@ -95,13 +95,13 @@ export default function Sidebar() {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/dashboard/catalogs/articles" className={linkClasses}>
-                      Atrículos
+                    <NavLink to="/dashboard/catalogs/unitsOfMeasurement" className={linkClasses}>
+                      Unidades de Medida
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/dashboard/catalogs/unitsOfMeasurement" className={linkClasses}>
-                      Unidades de Medida
+                    <NavLink to="/dashboard/catalogs/articles" className={linkClasses}>
+                      Atrículos
                     </NavLink>
                   </li>
                 </ul>
